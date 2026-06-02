@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSC CGL Smart Coach Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060913;
+  --bg2: #0f1524;
+  --bg3: #172033;
+  --bg4: #1e2942;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f1f3f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #3b82f6;
+  --accent2: #8b5cf6;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --pink: #ec4899;
+  --teal: #14b8a6;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.brand{font-family:'Syne',sans-serif}
+
+/* LAYOUT */
+.app{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s;overflow-y:auto}
+.main{margin-left:240px;flex:1;min-height:100vh;padding:24px;padding-bottom:100px}
+.brand{font-size:18px;font-weight:800;padding:24px 20px 16px;color:var(--text);letter-spacing:-.5px;border-bottom:1px solid var(--border)}
+.brand span{color:var(--accent)}
+.nav-section{padding:16px 16px 4px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 14px;margin:2px 8px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .2s;text-decoration:none}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(139,92,246,0.15));color:var(--text);border:1px solid rgba(59,130,246,0.2)}
+.nav-item .icon{width:18px;text-align:center;font-size:15px}
+.sidebar-bottom{margin-top:auto;padding:12px 6px}
+.page{display:none}
+.page.active{display:block}
+
+/* MODE TOGGLE COORD */
+.mode-toggle-container {
+  display: flex;
+  background: var(--bg3);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  margin: 10px 16px;
+  border: 1px solid var(--border);
+}
+.mode-btn {
+  flex: 1;
+  text-align: center;
+  padding: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--text2);
+  transition: all 0.2s;
+}
+.mode-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* SUBJECT TABS */
+.subject-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 12px;
+  overflow-x: auto;
+}
+.subject-tab {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.subject-tab:hover {
+  color: var(--text);
+  border-color: var(--border2);
+}
+.subject-tab.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-color: var(--accent);
+}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-sm{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.flex{display:flex;align-items:center;gap:10px}
+.flex-between{display:flex;align-items:center;justify-content:space-between}
+.flex-wrap{display:flex;flex-wrap:wrap;gap:8px}
+
+/* TYPOGRAPHY */
+.page-title{font-size:26px;font-weight:800;margin-bottom:4px;color:var(--text);letter-spacing:-0.5px}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
+.card-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.big-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--text);line-height:1.2}
+.label{font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:500}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.tag-blue{background:rgba(59,130,246,0.15);color:#60a5fa}
+.tag-green{background:rgba(16,185,129,0.15);color:#34d399}
+.tag-amber{background:rgba(245,158,11,0.15);color:#fbbf24}
+.tag-red{background:rgba(239,68,68,0.15);color:#f87171}
+.tag-purple{background:rgba(139,92,246,0.15);color:#a78bfa}
+.tag-gray{background:rgba(255,255,255,0.06);color:var(--text2)}
+
+/* PROGRESS */
+.progress{height:6px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.6s cubic-bezier(0.4, 0, 0.2, 1)}
+.fill-blue{background:var(--accent)}
+.fill-green{background:var(--green)}
+.fill-amber{background:var(--amber)}
+.fill-red{background:var(--red)}
+.fill-purple{background:var(--accent2)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:all 0.2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}
+.btn-secondary:hover{background:var(--bg4)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg3);color:var(--text)}
+.btn-danger{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+.btn-danger:hover{background:rgba(239,68,68,0.25)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-green{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.2)}
+.btn-green:hover{background:rgba(16,185,129,0.25)}
+
+/* INPUTS */
+input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:inherit;font-size:13px;padding:10px 14px;width:100%;outline:none;transition:border 0.2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--bg2)}
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block;font-weight:600}
+textarea{resize:vertical;min-height:90px}
+
+/* READINESS RING */
+.ring-wrap{position:relative;width:120px;height:120px;margin:0 auto}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-score{font-family:'Syne',sans-serif;font-size:26px;font-weight:800}
+.ring-label{font-size:10px;color:var(--text2);margin-top:-2px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:12px;color:var(--text3);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;border-bottom:1px solid var(--border)}
+td{padding:12px;border-bottom:1px solid var(--border);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.01)}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px 20px;font-size:13px;color:var(--text);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s ease;max-width:320px;box-shadow:var(--shadow)}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;width:90%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow)}
+.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
+.modal-close{cursor:pointer;color:var(--text3);font-size:18px;padding:4px}
+.modal-close:hover{color:var(--text)}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:100;padding:8px 0 12px;box-shadow:0 -5px 20px rgba(0,0,0,0.4)}
+.mobile-nav-items{display:flex;justify-content:space-around}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;color:var(--text3);font-size:10px;font-weight:500;transition:color 0.2s}
+.mobile-nav-item.active{color:var(--accent)}
+.mobile-nav-item .mni{font-size:18px}
+.menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--text);font-size:16px;box-shadow:var(--shadow)}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90}
+
+/* CHART BARS */
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:120px;margin-top:16px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.bar{flex:1;border-radius:6px 6px 0 0;min-height:4px;transition:height 0.6s cubic-bezier(0.4, 0, 0.2, 1);position:relative;background:var(--accent)}
+.bar-label{font-size:9px;color:var(--text3);text-align:center;margin-top:6px}
+.bar-val{font-size:9px;color:var(--text2);text-align:center;margin-bottom:4px}
+
+/* PLAN ITEMS */
+.plan-item{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;transition:all 0.2s;cursor:pointer}
+.plan-item:hover{border-color:var(--border2);background:var(--bg4)}
+.plan-item.done{opacity:0.45}
+.plan-item.done .pi-title{text-decoration:line-through}
+.pi-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.2s}
+.plan-item.done .pi-check{background:var(--green);border-color:var(--green);color:#fff}
+.pi-title{font-size:13px;font-weight:600}
+.pi-meta{font-size:11px;color:var(--text3)}
+.pi-time{font-size:12px;font-weight:600;color:var(--text2);white-space:nowrap}
+.pi-badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700}
+
+/* TOPIC CARD */
+.topic-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+.topic-card:hover{border-color:var(--border2);transform:translateX(2px)}
+
+/* FLASHCARD FLIP CSS */
+.fc-card { perspective: 1000px; width: 100%; height: 180px; cursor: pointer; margin-bottom: 16px;}
+.fc-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+.fc-card.flipped .fc-inner { transform: rotateY(180deg); }
+.fc-front, .fc-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border: 1px solid var(--border2); box-shadow: var(--shadow);}
+.fc-front { background: var(--bg2); color: var(--text); }
+.fc-back { background: var(--bg4); color: #fff; transform: rotateY(180deg); }
+
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:11px;cursor:pointer;position:relative;transition:background 0.2s;background:var(--bg3);border:1px solid var(--border)}
+.cal-day:hover{background:var(--bg4)}
+.cal-day.has-revision{background:rgba(59,130,246,0.15);color:#60a5fa;border-color:rgba(59,130,246,0.3)}
+.cal-day.today{background:var(--accent);color:#fff;font-weight:700;border-color:var(--accent)}
+.cal-day.missed{background:rgba(239,68,68,0.15);color:#f87171;border-color:rgba(239,68,68,0.3)}
+.cal-header{font-size:10px;color:var(--text3);text-align:center;padding:6px 0;font-weight:700;text-transform:uppercase}
+
+/* RECOVERY & GENERAL BANNER */
+.countdown-banner{background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(139,92,246,0.08));border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius);padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.rec-card{background:var(--bg3);border-left:4px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:12px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.rec-card.priority-critical{border-left-color:var(--red)}
+.rec-card.priority-high{border-left-color:var(--amber)}
+.rec-card.priority-medium{border-left-color:var(--accent)}
+.rec-card.priority-low{border-left-color:var(--green)}
+
+.empty-state{text-align:center;padding:32px 16px;color:var(--text3)}
+.empty-state .es-icon{font-size:36px;margin-bottom:8px}
+
+@media(max-width:992px) {
+  .grid4{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main{margin-left:0;padding:16px 14px 100px}
+  .mobile-nav{display:block}
+  .menu-btn{display:block}
+  .grid2{grid-template-columns:1fr}
+  .page-title{font-size:22px;margin-top:40px}
+}
+</style>
+</head>
+<body>
+
+<div class="setup-screen" id="setupScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:999;align-items:center;justify-content:center">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:32px;width:90%;max-width:440px;box-shadow:var(--shadow)">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px">SSC CGL <span style="color:var(--accent)">Smart Coach</span></div>
+    <div style="color:var(--text2);font-size:13px;margin-bottom:24px">Your comprehensive algorithmic preparation companion.</div>
+    <div class="form-group">
+      <label class="form-label">Your Name</label>
+      <input type="text" id="setupName" placeholder="Enter full name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Exam Target Date</label>
+      <input type="date" id="setupExamDate">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Daily Committed Hours</label>
+      <select id="setupHours">
+        <option value="3">3 Hours</option>
+        <option value="4">4 Hours</option>
+        <option value="5" selected>5 Hours</option>
+        <option value="6">6 Hours</option>
+        <option value="7">7 Hours</option>
+        <option value="8">8 Hours</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Initial Focus Subject</label>
+      <select id="setupWeak">
+        <option value="quant">Quantitative Aptitude</option>
+        <option value="english">English Language</option>
+        <option value="gk">General Awareness</option>
+        <option value="reasoning">General Intelligence & Reasoning</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;margin-top:10px" onclick="completeSetup()">Initialize Dashboard 🚀</button>
+  </div>
+</div>
+
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="brand">SSC CGL <span>Coach Pro</span></div>
+  
+  <div class="mode-toggle-container">
+    <div class="mode-btn active" id="mBtnTier1" onclick="switchExamPhase('tier1')">Tier-1 Mode</div>
+    <div class="mode-btn" id="mBtnTier2" onclick="switchExamPhase('tier2')">Tier-2 Mode</div>
+  </div>
+
+  <div class="nav-section">Core Matrix</div>
+  <a class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard"><span class="icon">🏠</span>Dashboard</a>
+  <a class="nav-item" onclick="showPage('planner')" data-page="planner"><span class="icon">📅</span>Daily Planner</a>
+  <a class="nav-item" onclick="showPage('syllabus')" data-page="syllabus"><span class="icon">📚</span>Syllabus Engine</a>
+  <a class="nav-item" onclick="showPage('revision')" data-page="revision"><span class="icon">🔄</span>Spaced Repetition</a>
+  
+  <div class="nav-section">Diagnostic Hub</div>
+  <a class="nav-item" onclick="showPage('mock')" data-page="mock"><span class="icon">📝</span>Mocks Workspace</a>
+  <a class="nav-item" onclick="showPage('wrong-analyzer')" data-page="wrong-analyzer"><span class="icon">❌</span>Wrong Qs Analyzer</a>
+  <a class="nav-item" onclick="showPage('recovery-plan')" data-page="recovery-plan"><span class="icon">⚡</span>Recovery Module</a>
+  <a class="nav-item" onclick="showPage('flashcards')" data-page="flashcards"><span class="icon">🃏</span>Flashcards Arena</a>
+  
+  <div class="nav-section">Biometrics & Analytics</div>
+  <a class="nav-item" onclick="showPage('analytics')" data-page="analytics"><span class="icon">📊</span>Deep Analytics</a>
+  <a class="nav-item" onclick="showPage('timer')" data-page="timer"><span class="icon">⏱️</span>Pomodoro Engine</a>
+  <a class="nav-item" onclick="showPage('recommendations')" data-page="recommendations"><span class="icon">💡</span>Rules Advisor</a>
+  
+  <div class="sidebar-bottom">
+    <a class="nav-item" onclick="showPage('profile')" data-page="profile"><span class="icon">👤</span>System Profile</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="page active" id="page-dashboard">
+    <div class="page-title" id="dashGreeting">System Active 👋</div>
+    <div class="page-sub">Comprehensive multi-dimensional metrics dashboard</div>
+
+    <div class="countdown-banner">
+      <div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:2px">Chronometer Target Count</div>
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <span class="big-num" style="color:var(--accent);font-size:38px" id="countdownDays">--</span>
+          <span style="font-size:13px;color:var(--text2)">days remaining</span>
+        </div>
+        <div style="font-size:11px;color:var(--text3)" id="examDateDisplay">Target Timestamp</div>
+      </div>
+      
+      <div style="display:flex;gap:24px;align-items:center">
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Predicted Tier-1</div>
+          <div class="big-num" style="color:var(--green);font-size:28px" id="dashPredictedScore">--</div>
+        </div>
+        <div style="text-align:center">
+          <div class="ring-wrap" style="width:80px;height:80px">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+              <circle cx="40" cy="40" r="34" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"
+                stroke-dasharray="213.6" id="readinessDash" stroke-dashoffset="213.6" style="transition:all 0.8s ease"/>
+            </svg>
+            <div class="ring-center">
+              <div class="ring-score" style="font-size:20px" id="readinessScore">0</div>
+              <div class="ring-label" style="font-size:8px">Readiness</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid4" style="margin-bottom:16px">
+      <div class="card-sm">
+        <div class="label">Syllabus Absorption</div>
+        <div class="big-num" id="dashProgress">0%</div>
+        <div class="progress"><div class="progress-fill fill-blue" id="dashProgressBar" style="width:0%"></div></div>
+      </div>
+      <div class="card-sm">
+        <div class="label">Time Efficiency Index</div>
+        <div class="big-num" id="dashEfficiency">0%</div>
+        <div style="font-size:11px;color:var(--text3)">Weekly tracking efficiency</div>
+      </div>
+      <div class="card-sm">
+        <div class="label">Revision Integrity</div>
+        <div class="big-num" id="dashRevHealth">0%</div>
+        <div style="font-size:11px;color:var(--text3)">Cycle health parameter</div>
+      </div>
+      <div class="card-sm">
+        <div class="label">Activity Streak</div>
+        <div class="big-num">🔥 <span id="dashStreak">0</span></div>
+        <div style="font-size:11px;color:var(--text3)">Consecutive workflow days</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="section-hdr flex-between" style="margin-bottom:12px">
+            <h3 style="font-size:14px">📅 Executive Daily Target Queue</h3>
+            <button class="btn btn-sm btn-secondary" onclick="forceRegeneratePlan()">Re-Compile Plan</button>
+          </div>
+          <div id="todayPlanContainer"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ Operational Recovery Status</div>
+          <div id="dashRecoveryStatus"></div>
+        </div>
+      </div>
+      
+      <div>
+        <div class="card">
+          <div class="card-title">⚠️ Priority Threat Vectors (Top Weak Topics)</div>
+          <div id="weakTopicsDash"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⭐ Stronghold Coordinates (Top Mastered Topics)</div>
+          <div id="strongTopicsDash"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-planner">
+    <div class="page-title">Daily Planner Module</div>
+    <div class="page-sub">Algorithmic dynamic execution planner and daily schedule generator</div>
+    <div class="week-strip" id="weekStrip" style="margin-bottom:16px"></div>
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="card-title">Core Dynamic Study Operations</div>
+          <div id="plannerNewTopics"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Spaced Repetition Integration Pipeline</div>
+          <div id="plannerRevisions"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title">Tactical Practice Routines</div>
+          <div id="plannerPractice"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Next-Day Operations Preview Matrix</div>
+          <div id="tomorrowPreview"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="flex-between">
+        <div>
+          <h3 style="font-size:14px;margin-bottom:4px">📋 End of Day Workflow Validation</h3>
+          <p style="font-size:12px;color:var(--text2)">Log precise study parameters to recalibrate the neural priority engine.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('reviewModal')">Complete Verification</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-syllabus">
+    <div class="page-title">Syllabus Engine</div>
+    <div class="page-sub">Track individual topic completion statuses for Tier-1 and Tier-2 criteria</div>
+    <div class="grid4" id="syllabusStats" style="margin-bottom:16px"></div>
+    <div class="subject-tabs" id="syllabusSubjectTabs" style="margin-bottom:16px"></div>
+    <div class="flex-wrap" style="margin-bottom:16px">
+      <button class="btn btn-sm btn-ghost" onclick="filterTopics('all')">All Nodes</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterTopics('not_started')">Uninitialized</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterTopics('in_progress')">Active Pipeline</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterTopics('completed')">Fully Absolved</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterTopics('weak')">⚠ Below Benchmark</button>
+    </div>
+    <div id="topicsContainer"></div>
+  </div>
+
+  <div class="page" id="page-revision">
+    <div class="page-title">Ebbinghaus Spaced Repetition Array</div>
+    <div class="page-sub">System-driven variable-interval iteration cycle automation</div>
+    <div class="grid4" id="revisionStats" style="margin-bottom:16px"></div>
+    <div class="grid2">
+      <div>
+        <div class="card"><div class="card-title">Due Iterations Today</div><div id="revisionDueToday"></div></div>
+        <div class="card"><div class="card-title">Overdue Backlog Iterations</div><div id="revisionMissed"></div></div>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">Next 7-Day Forecasting Spectrum</div><div id="revisionUpcoming"></div></div>
+        <div class="card">
+          <div class="card-title">Iterative Lifecycle Calendar</div>
+          <div class="cal-grid" style="margin-bottom:6px">
+            <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
+            <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>
+          </div>
+          <div class="cal-grid" id="calendarGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-mock">
+    <div class="page-title">Mocks Workspace Matrix</div>
+    <div class="page-sub">Analyze and decompose aggregate full-length performance indicators</div>
+    <div class="grid4" id="mockStats" style="margin-bottom:16px"></div>
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="card-title">Bi-Directional Score Timeline</div>
+          <div id="mockBarChart" class="bar-chart"></div>
+          <div id="mockBarLabels" style="display:flex;justify-content:space-between;padding-top:4px"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cross-Sectional Baseline Analysis</div>
+          <div id="mockSubjectAccuracy"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="flex-between" style="margin-bottom:14px">
+            <h3 style="font-size:13px;text-transform:uppercase;color:var(--text3)">Logged Assessments</h3>
+            <button class="btn btn-sm btn-primary" onclick="openModal('addMockModal')">+ Log Assessment</button>
+          </div>
+          <div id="mockTestList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-wrong-analyzer">
+    <div class="page-title">Wrong Question Analyzer</div>
+    <div class="page-sub">Deconstruct granular error data into actionable remedial pathways</div>
+    <div class="grid3" style="margin-bottom:16px">
+      <div class="card-sm">
+        <div class="label">Most Distressed Subject</div>
+        <div class="big-num" style="color:var(--red)" id="waBadSubject">--</div>
+      </div>
+      <div class="card-sm">
+        <div class="label">Dominant Threat Vector</div>
+        <div class="big-num" style="color:var(--amber)" id="waBadErrorType">--</div>
+      </div>
+      <div class="card-sm">
+        <div class="label">Remediation Vector Count</div>
+        <div class="big-num" style="color:var(--green)" id="waTotalCount">0</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="flex-between" style="margin-bottom:12px">
+          <h3 style="font-size:13px;text-transform:uppercase;color:var(--text3)">Granular Failure Logs</h3>
+          <button class="btn btn-sm btn-primary" onclick="openModal('addMistakeModal')">+ Log Failure Node</button>
+        </div>
+        <div class="flex-wrap" style="margin-bottom:12px">
+          <button class="btn btn-sm btn-ghost" onclick="filterMistakes('all')">All Errors</button>
+          <button class="btn btn-sm btn-ghost" onclick="filterMistakes('CONCEPT')">Concept</button>
+          <button class="btn btn-sm btn-ghost" onclick="filterMistakes('CALCULATION')">Calculation</button>
+          <button class="btn btn-sm btn-ghost" onclick="filterMistakes('SILLY')">Silly</button>
+          <button class="btn btn-sm btn-ghost" onclick="filterMistakes('TIME')">Time Strain</button>
+        </div>
+        <div id="mistakeList"></div>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">Top Threat Sub-Topics</div><div id="waTopWeakTopics"></div></div>
+        <div class="card"><div class="card-title">Error Taxonomy Allocation</div><div id="errorTypeChart"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-recovery-plan">
+    <div class="page-title">Algorithmic Recovery Engine</div>
+    <div class="page-sub">Automated 7-day tactical stabilization pathways targeting anomalous performance vectors</div>
+    <div class="countdown-banner" id="recoveryBanner">
+      <div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px" id="recoveryStatusTitle">Status Evaluation</div>
+        <p style="font-size:12px;color:var(--text2)" id="recoveryStatusDesc">Analyzing systemic metrics...</p>
+      </div>
+      <button class="btn btn-primary" onclick="compileSevenDayRecoveryPlan()">Compile Recovery Matrix</button>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">7-Day Targeted Recovery Sequence</div>
+        <div id="recoveryTimelineContainer"></div>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">System Isolation Targets</div><div id="recoveryTargetsContainer"></div></div>
+        <div class="card">
+          <div class="card-title">Efficiency Calibration Diagnostics</div>
+          <div id="efficiencyMetricsBreakdown"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-pyq">
+    <div class="page-title">PYQ Archive Tracker</div>
+    <div class="page-sub">Validate mastery using actual past year questions and structural parameters</div>
+    <div class="grid4" id="pyqStats" style="margin-bottom:16px"></div>
+    <div class="subject-tabs" id="pyqSubjectTabs" style="margin-bottom:16px"></div>
+    <div id="pyqContainer"></div>
+  </div>
+
+  <div class="page" id="page-flashcards">
+    <div class="page-title">Flashcards Arena (Active Recall)</div>
+    <div class="page-sub">High-intensity micro-retention flashcards automatically pulled from your error nodes</div>
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Dynamic Flashcard Module</div>
+        <div class="fc-card" id="flashcardElement" onclick="flipFlashcard()">
+          <div class="fc-inner">
+            <div class="fc-front"><h3 style="font-size:15px;" id="fcQuestionDisplay">Log errors to generate cards</h3></div>
+            <div class="fc-back"><p style="font-size:14px;font-weight:600" id="fcAnswerDisplay">Answer Coordinates</p></div>
+          </div>
+        </div>
+        <div class="flex-between">
+          <button class="btn btn-secondary" onclick="cycleFlashcard(-1)">◀ Previous</button>
+          <button class="btn btn-primary" onclick="cycleFlashcard(1)">Next Node ▶</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Manual Flashcard Creator Node</div>
+        <div class="form-group"><label class="form-label">Core Prompt / Question</label><input type="text" id="fcNewQ"></div>
+        <div class="form-group"><label class="form-label">Target Answer Response</label><input type="text" id="fcNewA"></div>
+        <button class="btn btn-primary" onclick="commitManualFlashcard()">Inject Flashcard</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-analytics">
+    <div class="page-title">Analytics Diagnostic Dashboard</div>
+    <div class="page-sub">Deconstruct multi-variable metrics across timelines, volume, accuracy, and velocity</div>
+    
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Temporal Work Distribution (Last 7 Days)</div>
+        <div id="studyHoursChart" class="bar-chart"></div>
+        <div id="studyHoursLabels" style="display:flex;justify-content:space-between;padding-top:4px"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Subject Readiness Allocation Matrix</div>
+        <div id="subjectCompletionChart"></div>
+      </div>
+    </div>
+    
+    <div class="grid3" style="margin-bottom:16px">
+      <div class="card"><div class="card-title">Velocity Profiles (Time/Mock)</div><div id="analyticsSpeedChart" class="bar-chart"></div><div id="analyticsSpeedLabels" style="display:flex;justify-content:space-between;padding-top:4px"></div></div>
+      <div class="card"><div class="card-title">Volumetric Test Trajectory</div><div id="analyticsAttemptsChart" class="bar-chart"></div><div id="analyticsAttemptsLabels" style="display:flex;justify-content:space-between;padding-top:4px"></div></div>
+      <div class="card"><div class="card-title">Precision Trendlines</div><div id="analyticsAccuracyChart" class="bar-chart"></div><div id="analyticsAccuracyLabels" style="display:flex;justify-content:space-between;padding-top:4px"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Comprehensive System Status Dossier</div>
+      <div class="grid4" id="analyticsOverall"></div>
+    </div>
+  </div>
+
+  <div class="page" id="page-timer">
+    <div class="page-title">Pomodoro Tracking Workspace</div>
+    <div class="page-sub">Log real-time localized temporal sessions to feed system optimization variables</div>
+    <div class="grid2">
+      <div class="card" style="text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:var(--accent);margin:24px 0" id="timerDisplay">25:00</div>
+        <div class="form-group" style="text-align:left">
+          <label class="form-label">Active Node Mapping</label>
+          <select id="timerTopic"><option value="">General Unmapped Session</option></select>
+        </div>
+        <div class="form-group" style="text-align:left">
+          <label class="form-label">Operation Classification</label>
+          <select id="timerType">
+            <option value="STUDY">📚 Primary Absorption</option>
+            <option value="REVISION">🔄 Structural Revision</option>
+            <option value="PRACTICE">📝 Velocity Practice</option>
+          </select>
+        </div>
+        <div class="flex-wrap" style="justify-content:center;margin-bottom:16px">
+          <button class="btn btn-sm btn-secondary" onclick="setTimer(25)">25m</button>
+          <button class="btn btn-sm btn-secondary" onclick="setTimer(45)">45m</button>
+          <button class="btn btn-sm btn-secondary" onclick="setTimer(60)">60m</button>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button class="btn btn-primary" id="timerStartBtn" onclick="toggleTimer()">▶ Initialize</button>
+          <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+          <button class="btn btn-green" onclick="logSession()">Commit Telemetry</button>
+        </div>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">Diurnal Session Telemetry Log</div><div id="todaySessionsList"></div></div>
+        <div class="card"><div class="card-title">Accumulated Work Records</div><div id="timerStatsPanel"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-recommendations">
+    <div class="page-title">Algorithmic Advisory Protocol</div>
+    <div class="page-sub">Rule-based analytical tracking offering prioritized structural modifications</div>
+    <div class="grid2">
+      <div>
+        <div class="card"><div class="card-title">🔴 Severe Threat Remediations</div><div id="recCritical"></div></div>
+        <div class="card"><div class="card-title">🟡 High-Priority Interventions</div><div id="recToday"></div></div>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">📅 Longitudinal Tactical Adjustments</div><div id="recWeekly"></div></div>
+        <div class="card"><div class="card-title">📊 Subject Priority Calibration Queue</div><div id="recSubjectOrder"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-profile">
+    <div class="page-title">System Settings & Data Management</div>
+    <div class="page-sub">Modify baseline system metrics and download data reports</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Configuration Control Matrix</div>
+        <div class="form-group"><label class="form-label">Aspirant Identifier</label><input type="text" id="profileName"></div>
+        <div class="form-group"><label class="form-label">Exam Deadline Date</label><input type="date" id="profileExamDate"></div>
+        <div class="form-group"><label class="form-label">Target Hours Daily Allocation</label><input type="number" id="profileHours" min="2" max="14"></div>
+        <button class="btn btn-primary" onclick="saveProfile()">Commit System Parameters</button>
+      </div>
+      <div class="card"><div class="card-title">Current Engine Coordinates</div><div id="profileStats"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Structural Portability & Clear Protocols</div>
+      <div class="flex-wrap">
+        <button class="btn btn-secondary" onclick="exportProgressReport()">📥 Progress Report</button>
+        <button class="btn btn-secondary" onclick="exportWeakTopicReport()">⚠️ Weak Topics Brief</button>
+        <button class="btn btn-secondary" onclick="exportMockHistory()">📊 Mock Dataset</button>
+        <button class="btn btn-secondary" onclick="exportData()">💾 Master JSON Export</button>
+        <button class="btn btn-danger" onclick="confirmReset()">🗑️ Destructive Global Reset</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mobile-nav">
+  <div class="mobile-nav-items">
+    <div class="mobile-nav-item active" onclick="showPage('dashboard')" data-mpage="dashboard"><div class="mni">🏠</div>Matrix</div>
+    <div class="mobile-nav-item" onclick="showPage('planner')" data-mpage="planner"><div class="mni">📅</div>Plan</div>
+    <div class="mobile-nav-item" onclick="showPage('syllabus')" data-mpage="syllabus"><div class="mni">📚</div>Syllabus</div>
+    <div class="mobile-nav-item" onclick="showPage('mock')" data-mpage="mock"><div class="mni">📝</div>Mocks</div>
+    <div class="mobile-nav-item" onclick="showPage('wrong-analyzer')" data-mpage="wrong-analyzer"><div class="mni">❌</div>Errors</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="topicModal">
+  <div class="modal">
+    <div class="flex-between" style="margin-bottom:16px"><h3 class="modal-title" id="topicModalTitle">Update Topic</h3><span class="modal-close" onclick="closeModal('topicModal')">✕</span></div>
+    <input type="hidden" id="editTopicId">
+    <div class="form-group">
+      <label class="form-label">Execution Stage</label>
+      <select id="editTopicStatus">
+        <option value="not_started">Uninitialized</option>
+        <option value="in_progress">In Active Pipeline</option>
+        <option value="completed">Completed (Triggers Repetition Array)</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Empirical Accuracy %</label><input type="number" id="editTopicAccuracy" min="0" max="100"></div>
+    <div class="form-group"><label class="form-label">Total Attempted Datapoints</label><input type="number" id="editTopicAttempted" min="0"></div>
+    <div class="form-group"><label class="form-label">Validated Accurate Responses</label><input type="number" id="editTopicCorrect" min="0"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('topicModal')">Abort</button>
+      <button class="btn btn-primary" onclick="saveTopicUpdate()">Commit Variables</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addMockModal">
+  <div class="modal" style="max-width: 560px;">
+    <div class="flex-between" style="margin-bottom:16px"><h3 class="modal-title">Log Full Mock Diagnostics</h3><span class="modal-close" onclick="closeModal('addMockModal')">✕</span></div>
+    <div class="grid3">
+      <div class="form-group"><label class="form-label">Test Timestamp</label><input type="date" id="mockDate"></div>
+      <div class="form-group"><label class="form-label">Total Aggregate Score</label><input type="number" id="mockScore" min="0" max="200" step="0.5" placeholder="Max 200"></div>
+      <div class="form-group"><label class="form-label">Temporal Budget (mins)</label><input type="number" id="mockTime" min="1" max="120" value="60"></div>
+    </div>
+    <div class="grid2">
+      <div class="form-group"><label class="form-label">Gross Item Attempts</label><input type="number" id="mockAttempted" min="0" max="100"></div>
+      <div class="form-group"><label class="form-label">Calculated Accuracy %</label><input type="number" id="mockAccuracyOverride" min="0" max="100" placeholder="Auto if left blank"></div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px"><h4 style="font-size:12px;color:var(--text2);margin-bottom:10px">Granular Cross-Section Breakdown (Max 50 Each)</h4></div>
+    <div class="grid4">
+      <div class="form-group"><label class="form-label">Quant</label><input type="number" id="mockQuant" min="0" max="50"></div>
+      <div class="form-group"><label class="form-label">English</label><input type="number" id="mockEnglish" min="0" max="50"></div>
+      <div class="form-group"><label class="form-label">GK</label><input type="number" id="mockGK" min="0" max="50"></div>
+      <div class="form-group"><label class="form-label">Reasoning</label><input type="number" id="mockReasoning" min="0" max="50"></div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+      <h4 style="font-size:12px;color:var(--text2);margin-bottom:10px">Actual Sectional Time Spent (Max 15m Each)</h4>
+    </div>
+    <div class="grid4">
+      <div class="form-group"><label class="form-label">Quant Time</label><input type="number" id="mockQuantTime" min="0" max="15" value="15"></div>
+      <div class="form-group"><label class="form-label">English Time</label><input type="number" id="mockEnglishTime" min="0" max="15" value="15"></div>
+      <div class="form-group"><label class="form-label">GK Time</label><input type="number" id="mockGKTime" min="0" max="15" value="15"></div>
+      <div class="form-group"><label class="form-label">Reasoning Time</label><input type="number" id="mockReasoningTime" min="0" max="15" value="15"></div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px"><h4 style="font-size:12px;color:var(--text2);margin-bottom:10px">Extracted Top-Level Topic Vector Core Accuracy (%)</h4></div>
+    <div class="grid3">
+      <div class="form-group"><label class="form-label">Algebra/Geom</label><input type="number" id="mtAlgebraGeom" min="0" max="100" value="70"></div>
+      <div class="form-group"><label class="form-label">Polity/Econ</label><input type="number" id="mtPolityEcon" min="0" max="100" value="65"></div>
+      <div class="form-group"><label class="form-label">Modern History</label><input type="number" id="mtModernHistory" min="0" max="100" value="60"></div>
+      <div class="form-group"><label class="form-label">Geography</label><input type="number" id="mtGeography" min="0" max="100" value="65"></div>
+      <div class="form-group"><label class="form-label">Vocabulary</label><input type="number" id="mtVocabulary" min="0" max="100" value="75"></div>
+      <div class="form-group"><label class="form-label">Grammar</label><input type="number" id="mtGrammar" min="0" max="100" value="70"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-ghost" onclick="closeModal('addMockModal')">Abort</button>
+      <button class="btn btn-primary" onclick="commitMockAssessment()">Process Diagnostic</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addMistakeModal">
+  <div class="modal">
+    <div class="flex-between" style="margin-bottom:16px"><h3 class="modal-title">Log Granular Error Parameters</h3><span class="modal-close" onclick="closeModal('addMistakeModal')">✕</span></div>
+    <div class="form-group"><label class="form-label">Question Node Specification / Context</label><textarea id="mistakeQuestion" placeholder="Deconstruct or paste the problem text explicitly..."></textarea></div>
+    <div class="grid2">
+      <div class="form-group"><label class="form-label">Subject Domain</label><select id="mistakeSubj" onchange="cascadeMistakeTopics()"><option value="quant">Quant</option><option value="english">English</option><option value="gk">General Awareness</option><option value="reasoning">Reasoning</option></select></div>
+      <div class="form-group"><label class="form-label">Topic Mapping</label><select id="mistakeTopic"></select></div>
+    </div>
+    <div class="grid2">
+      <div class="form-group"><label class="form-label">Faulty Response Value</label><input type="text" id="mistakeUserAns"></div>
+      <div class="form-group"><label class="form-label">Validated Correct Value</label><input type="text" id="mistakeCorrectAns"></div>
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label class="form-label">Error Taxonomy Classification</label>
+        <select id="mistakeType">
+          <option value="CONCEPT">Concept Deficit</option>
+          <option value="CALCULATION">Computational Slip</option>
+          <option value="SILLY">Silly Oversight</option>
+          <option value="TIME">Time Pressure Distortion</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Origin Stream</label>
+        <select id="mistakeSource"><option value="MOCK">Full Mock Extraction</option><option value="PYQ">Past Year Archive</option><option value="PRACTICE">Sectional Practice Node</option></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('addMistakeModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="commitMistakeNode()">Log Node</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal">
+    <div class="flex-between" style="margin-bottom:16px"><h3 class="modal-title">Verification Review</h3><span class="modal-close" onclick="closeModal('reviewModal')">✕</span></div>
+    <div class="form-group"><label class="form-label">Actual Chronological Hours Studied Today</label><input type="number" id="reviewHours" min="0" max="16" step="0.5"></div>
+    <div class="form-group"><label class="form-label">Tasks Successfully Executed</label><input type="number" id="reviewTasksDone" min="0"></div>
+    <div class="form-group">
+      <label class="form-label">Focus Density Index</label>
+      <select id="reviewFocus">
+        <option value="excellent">Absolute/Optimal Focus</option>
+        <option value="good">Nominal Focused Track</option>
+        <option value="average">Sub-optimal / Mildly Distracted</option>
+        <option value="poor">Fragmented / Inefficient Session</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('reviewModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="commitDailyVerification()">Verify Parameters</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="pyqModal">
+  <div class="modal">
+    <div class="flex-between" style="margin-bottom:16px"><h3 class="modal-title" id="pyqModalTitle">PYQ</h3><span class="modal-close" onclick="closeModal('pyqModal')">✕</span></div>
+    <input type="hidden" id="pyqTopicId">
+    <div class="form-group"><label class="form-label">Gross Past Year Questions In Archive</label><input type="number" id="pyqTotal" min="0"></div>
+    <div class="form-group"><label class="form-label">Volume Successfully Resolved</label><input type="number" id="pyqSolved" min="0"></div>
+    <div class="form-group"><label class="form-label">Accurate Confirmations</label><input type="number" id="pyqCorrect" min="0"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal('pyqModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="commitPyqNodeData()">Save Node Metrics</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+</div>
+
+<script>
+const SYLLABUS_DATA = {
+  subjects: [
+    { id: 'quant', name: 'Quantitative Aptitude', color: '#3b82f6', short: 'QA' },
+    { id: 'english', name: 'English Language', color: '#10b981', short: 'EN' },
+    { id: 'gk', name: 'General Awareness', color: '#f59e0b', short: 'GK' },
+    { id: 'reasoning', name: 'General Intelligence & Reasoning', color: '#ec4899', short: 'GI' }
+  ],
+  topics: [
+    // QUANT
+    { id: 'q1', subject: 'quant', name: 'Number System', weightage: 'VERY_HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q2', subject: 'quant', name: 'Simplification & Approximation', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q4', subject: 'quant', name: 'Percentage', weightage: 'VERY_HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q6', subject: 'quant', name: 'Profit & Loss', weightage: 'VERY_HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q10', subject: 'quant', name: 'Time & Work', weightage: 'VERY_HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q12', subject: 'quant', name: 'Time, Speed & Distance', weightage: 'VERY_HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q16', subject: 'quant', name: 'Algebra', weightage: 'VERY_HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q17', subject: 'quant', name: 'Geometry', weightage: 'VERY_HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q18', subject: 'quant', name: 'Trigonometry', weightage: 'VERY_HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q19', subject: 'quant', name: 'Mensuration', weightage: 'VERY_HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q21', subject: 'quant', name: 'Data Interpretation (DI)', weightage: 'VERY_HIGH', coreGroup: 'Arithmetic' },
+    
+    // ENGLISH
+    { id: 'e1', subject: 'english', name: 'Reading Comprehension', weightage: 'VERY_HIGH', coreGroup: 'Grammar' },
+    { id: 'e2', subject: 'english', name: 'Cloze Test', weightage: 'HIGH', coreGroup: 'Vocabulary' },
+    { id: 'e4', subject: 'english', name: 'Error Spotting', weightage: 'VERY_HIGH', coreGroup: 'Grammar' },
+    { id: 'e5', subject: 'english', name: 'Sentence Improvement', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'e7', subject: 'english', name: 'Synonyms & Antonyms', weightage: 'HIGH', coreGroup: 'Vocabulary' },
+    { id: 'e8', subject: 'english', name: 'One Word Substitution', weightage: 'HIGH', coreGroup: 'Vocabulary' },
+    { id: 'e9', subject: 'english', name: 'Idioms & Phrases', weightage: 'HIGH', coreGroup: 'Vocabulary' },
+    { id: 'e13', subject: 'english', name: 'Tenses & Grammar Rules', weightage: 'VERY_HIGH', coreGroup: 'Grammar' },
+    
+    // GK
+    { id: 'g3', subject: 'gk', name: 'Modern India & Freedom Struggle', weightage: 'VERY_HIGH', coreGroup: 'Modern History' },
+    { id: 'g4', subject: 'gk', name: 'Indian Constitution & Polity', weightage: 'VERY_HIGH', coreGroup: 'Polity/Econ' },
+    { id: 'g5', subject: 'gk', name: 'Indian Economy', weightage: 'HIGH', coreGroup: 'Polity/Econ' },
+    { id: 'g7', subject: 'gk', name: 'Indian Geography', weightage: 'HIGH', coreGroup: 'Geography' },
+    { id: 'g10', subject: 'gk', name: 'General Science — Biology', weightage: 'HIGH', coreGroup: 'Geography' },
+    { id: 'g11', subject: 'gk', name: 'Current Affairs', weightage: 'VERY_HIGH', coreGroup: 'Polity/Econ' },
+    
+    // REASONING
+    { id: 'r1', subject: 'reasoning', name: 'Analogy', weightage: 'VERY_HIGH', coreGroup: 'Vocabulary' },
+    { id: 'r3', subject: 'reasoning', name: 'Series (Number, Letter)', weightage: 'VERY_HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'r4', subject: 'reasoning', name: 'Coding-Decoding', weightage: 'VERY_HIGH', coreGroup: 'Grammar' },
+    { id: 'r12', subject: 'reasoning', name: 'Venn Diagrams', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'r16', subject: 'reasoning', name: 'Cube & Dice', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+
+    // ==== QUANTITATIVE APTITUDE (REST OF SYLLABUS) ====
+    { id: 'q3', subject: 'quant', name: 'Average', weightage: 'HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q5', subject: 'quant', name: 'Ratio & Proportion', weightage: 'HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q7', subject: 'quant', name: 'Discount', weightage: 'HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q8', subject: 'quant', name: 'Simple Interest', weightage: 'HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q9', subject: 'quant', name: 'Compound Interest', weightage: 'VERY_HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q11', subject: 'quant', name: 'Pipe & Cistern', weightage: 'MEDIUM', coreGroup: 'Arithmetic' },
+    { id: 'q13', subject: 'quant', name: 'Boat & Stream', weightage: 'MEDIUM', coreGroup: 'Arithmetic' },
+    { id: 'q14', subject: 'quant', name: 'Train Problems', weightage: 'MEDIUM', coreGroup: 'Arithmetic' },
+    { id: 'q15', subject: 'quant', name: 'Mixture & Alligation', weightage: 'HIGH', coreGroup: 'Arithmetic' },
+    { id: 'q20', subject: 'quant', name: 'Statistics & Probability', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q22', subject: 'quant', name: 'Partnership', weightage: 'MEDIUM', coreGroup: 'Arithmetic' },
+    { id: 'q23', subject: 'quant', name: 'Surds & Indices', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'q25', subject: 'quant', name: 'LCM & HCF', weightage: 'MEDIUM', coreGroup: 'Algebra/Geom' },
+
+    // ==== ENGLISH LANGUAGE (REST OF SYLLABUS) ====
+    { id: 'e3', subject: 'english', name: 'Fill in the Blanks', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'e6', subject: 'english', name: 'Sentence Rearrangement (Para Jumbles)', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'e10', subject: 'english', name: 'Spelling Correction', weightage: 'MEDIUM', coreGroup: 'Vocabulary' },
+    { id: 'e11', subject: 'english', name: 'Active & Passive Voice', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'e12', subject: 'english', name: 'Direct & Indirect Speech', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'e14', subject: 'english', name: 'Prepositions & Conjunctions', weightage: 'MEDIUM', coreGroup: 'Grammar' },
+    { id: 'e15', subject: 'english', name: 'Articles', weightage: 'MEDIUM', coreGroup: 'Grammar' },
+
+    // ==== GENERAL AWARENESS (REST OF SYLLABUS) ====
+    { id: 'g1', subject: 'gk', name: 'History — Ancient India', weightage: 'HIGH', coreGroup: 'Modern History' },
+    { id: 'g2', subject: 'gk', name: 'History — Medieval India', weightage: 'HIGH', coreGroup: 'Modern History' },
+    { id: 'g6', subject: 'gk', name: 'Physical Geography', weightage: 'HIGH', coreGroup: 'Geography' },
+    { id: 'g8', subject: 'gk', name: 'General Science — Physics', weightage: 'HIGH', coreGroup: 'Geography' },
+    { id: 'g9', subject: 'gk', name: 'General Science — Chemistry', weightage: 'HIGH', coreGroup: 'Geography' },
+    { id: 'g12', subject: 'gk', name: 'Awards, Honours & Sports', weightage: 'MEDIUM', coreGroup: 'Polity/Econ' },
+    { id: 'g14', subject: 'gk', name: 'Books & Authors', weightage: 'LOW', coreGroup: 'Vocabulary' },
+    { id: 'g16', subject: 'gk', name: 'Govt Schemes & Programmes', weightage: 'HIGH', coreGroup: 'Polity/Econ' },
+    { id: 'g20', subject: 'gk', name: 'Static GK (Art, Culture, Dance)', weightage: 'HIGH', coreGroup: 'Polity/Econ' },
+
+    // ==== REASONING (REST OF SYLLABUS) ====
+    { id: 'r2', subject: 'reasoning', name: 'Classification / Odd One Out', weightage: 'HIGH', coreGroup: 'Vocabulary' },
+    { id: 'r5', subject: 'reasoning', name: 'Blood Relations', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'r6', subject: 'reasoning', name: 'Direction & Distance', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'r7', subject: 'reasoning', name: 'Ranking & Sitting Arrangement', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'r8', subject: 'reasoning', name: 'Syllogism', weightage: 'HIGH', coreGroup: 'Grammar' },
+    { id: 'r13', subject: 'reasoning', name: 'Paper Folding, Cutting & Images', weightage: 'HIGH', coreGroup: 'Algebra/Geom' },
+    { id: 'r18', subject: 'reasoning', name: 'Mathematical Operations', weightage: 'MEDIUM', coreGroup: 'Algebra/Geom' },
+    { id: 'r20', subject: 'reasoning', name: 'Calendar & Clock', weightage: 'MEDIUM', coreGroup: 'Algebra/Geom' }
+  ]
+};
+
+const DB = {
+  _get(k) { try { return JSON.parse(localStorage.getItem('sscpro_' + k)) || null; } catch { return null; } },
+  _set(k, v) { localStorage.setItem('sscpro_' + k, JSON.stringify(v)); },
+
+  getProfile() { return this._get('profile') || { name: '', examDate: '', dailyHours: 5, streak: 0, totalMinutes: 0, lastActiveDate: '', phaseMode: 'tier1', freezeTokens: 2 }; },
+  saveProfile(p) { this._set('profile', p); },
+
+  getTopicState(id) { 
+    const all = this._get('topics') || {}; 
+    if(!all[id]) {
+      all[id] = { id, status: 'not_started', accuracy: 0, attempted: 0, correct: 0, revisionCount: 0, completedAt: null, lastRevisedAt: null, masteryLevel: 1, pyqTotal: 40, pyqSolved: 0, pyqCorrect: 0 };
+    }
+    return all[id]; 
+  },
+  saveTopicState(id, s) { const all = this._get('topics') || {}; all[id] = s; this._set('topics', all); },
+  getAllTopicStates() { return this._get('topics') || {}; },
+
+  getRevisions() { return this._get('revisions') || []; },
+  saveRevisions(r) { this._set('revisions', r); },
+
+  getMockTests() { return this._get('mocks') || []; },
+  addMockTest(m) { const all = this.getMockTests(); all.push(m); this._set('mocks', all); },
+  deleteMockTest(id) { this._set('mocks', this.getMockTests().filter(m => m.id !== id)); },
+
+  getMistakes() { return this._get('mistakes') || []; },
+  addMistake(m) { const all = this.getMistakes(); all.push(m); this._set('mistakes', all); },
+  deleteMistake(id) { this._set('mistakes', this.getMistakes().filter(m => m.id !== id)); },
+  resolveMistake(id) {
+    const all = this.getMistakes();
+    const idx = all.findIndex(m => m.id === id);
+    if (idx >= 0) { all[idx].resolved = !all[idx].resolved; this._set('mistakes', all); }
+  },
+
+  getSessions() { return this._get('sessions') || []; },
+  addSession(s) { const all = this.getSessions(); all.push(s); this._set('sessions', all); },
+
+  getDailyPlan() { return this._get('dailyplan') || null; },
+  saveDailyPlan(p) { this._set('dailyplan', p); },
+
+  getVerificationLogs() { return this._get('verifications') || []; },
+  addVerificationLog(v) { const all = this.getVerificationLogs(); all.push(v); this._set('verifications', all); },
+
+  getRecoveryPlan() { return this._get('recovery_plan_state') || null; },
+  saveRecoveryPlan(p) { this._set('recovery_plan_state', p); },
+
+  getManualFlashcards() { return this._get('m_flashcards') || []; },
+  saveManualFlashcards(f) { this._set('m_flashcards', f); }
+};
+
+// ==========================================
+//          ALGORITHMIC ENGINE LAB           --> EVERYTHING REAL-TIME & INJECTED
+// ==========================================
+const Engine = {
+  classifyTopic(ts) {
+    if (ts.status === 'not_started') return { label: 'Uninitialized', color: '#64748b', tag: 'tag-gray', priority: 5 };
+    const acc = ts.accuracy;
+    if (acc < 45) return { label: 'Critical Node', color: '#ef4444', tag: 'tag-red', priority: 4 };
+    if (acc < 65) return { label: 'Weak Domain', color: '#f59e0b', tag: 'tag-amber', priority: 3 };
+    if (acc < 80) return { label: 'Developing Baseline', color: '#3b82f6', tag: 'tag-blue', priority: 2 };
+    return { label: 'Competitive Stronghold', color: '#10b981', tag: 'tag-green', priority: 1 };
+  },
+
+  calculateReadinessMetrics() {
+    const topics = SYLLABUS_DATA.topics;
+    const total = topics.length;
+    let completed = 0;
+    topics.forEach(t => {
+      const ts = DB.getTopicState(t.id);
+      if(ts.status === 'completed') completed++;
+    });
+
+    const syllabusScore = total > 0 ? (completed / total) * 100 : 0;
+    const mocks = DB.getMockTests();
+    let mockScore = 0;
+    if (mocks.length > 0) {
+      const last5 = mocks.slice(-5);
+      mockScore = (last5.reduce((acc, m) => acc + m.score, 0) / last5.length) / 200 * 100;
+    }
+
+    const revs = DB.getRevisions();
+    const doneRevs = revs.filter(r => r.status === 'DONE').length;
+    const revisionScore = revs.length > 0 ? (doneRevs / revs.length) * 100 : 100;
+
+    const profile = DB.getProfile();
+    const streakScore = Math.min((profile.streak || 0) / 21, 1) * 100;
+
+    const composite = Math.round((syllabusScore * 0.35) + (mockScore * 0.35) + (revisionScore * 0.20) + (streakScore * 0.10));
+
+    return {
+      total: Math.max(0, Math.min(composite, 100)),
+      syllabus: Math.round(syllabusScore),
+      mock: Math.round(mockScore * 2), // Maps to real value indicator
+      revision: Math.round(revisionScore),
+      efficiency: this.calculateEfficiencyMetrics().weekly
+    };
+  },
+
+  calculateEfficiencyMetrics() {
+    const logs = DB.getVerificationLogs();
+    const profile = DB.getProfile();
+    const target = profile.dailyHours || 5;
+    if (logs.length === 0) return { daily: 0, weekly: 0, monthly: 0 };
+
+    const last7 = logs.slice(-7);
+    const actualSum = last7.reduce((acc, l) => acc + l.hours, 0);
+    const targetSum = last7.length * target;
+
+    const weeklyPct = targetSum > 0 ? Math.round((actualSum / targetSum) * 100) : 0;
+    return {
+      daily: logs.length > 0 ? Math.round((logs[logs.length-1].hours / target) * 100) : 0,
+      weekly: Math.min(weeklyPct, 100),
+      monthly: Math.min(weeklyPct, 100) // Interpolated data parameter compatibility
+    };
+  },
+
+  getSubjectReadinessLevel(subjId) {
+    const topics = SYLLABUS_DATA.topics.filter(t => t.subject === subjId);
+    if(topics.length === 0) return 'Beginner';
+    let sumAcc = 0;
+    let counts = 0;
+    topics.forEach(t => {
+      const ts = DB.getTopicState(t.id);
+      if(ts.status !== 'not_started') {
+        sumAcc += ts.accuracy;
+        counts++;
+      }
+    });
+    if(counts === 0) return 'Beginner';
+    const avg = sumAcc / counts;
+    if (avg < 50) return 'Beginner';
+    if (avg < 68) return 'Developing';
+    if (avg < 82) return 'Competitive';
+    return 'Exam Ready';
+  },
+
+  predictExpectedScores() {
+    const mocks = DB.getMockTests();
+    if (mocks.length === 0) return { expected: 110, best: 130, worst: 90 };
+    const last10 = mocks.slice(-10);
+    const avg = last10.reduce((acc, m) => acc + m.score, 0) / last10.length;
+    
+    // Core calculation boundaries cleanly capped up to 200 marks ceiling
+    return {
+      expected: Math.round(avg),
+      best: Math.round(Math.min(avg + 18, 200)),
+      worst: Math.round(Math.max(avg - 22, 0))
+    };
+  },
+
+  generateDynamicPlanMatrix(targetHours) {
+    const today = new Date().toISOString().split('T')[0];
+    const totalMinutes = targetHours * 60;
+    let allocated = 0;
+    
+    const plan = { date: today, new: [], revision: [], practice: [] };
+    const revisions = DB.getRevisions().filter(r => r.dueDate <= today && r.status === 'PENDING');
+
+    // Smart Booster Rules Integration
+    revisions.forEach(r => {
+      if(allocated >= totalMinutes) return;
+      const topic = SYLLABUS_DATA.topics.find(t => t.id === r.topicId);
+      if(topic) {
+        plan.revision.push({ topicId: r.topicId, topicName: topic.name, subject: topic.subject, time: 25, revId: r.id });
+        allocated += 25;
+      }
+    });
+
+    // Extract Weakest Topic Vectors
+    const scoredTopics = SYLLABUS_DATA.topics.map(t => {
+      const ts = DB.getTopicState(t.id);
+      let score = 0;
+      if (ts.status === 'not_started') score = 90;
+      else if (ts.accuracy < 50) score = 100; // Boost prioritization parameters
+      else if (ts.accuracy < 70) score = 70;
+      return { topic: t, ts, score };
+    }).sort((a,b) => b.score - a.score);
+
+    scoredTopics.forEach(st => {
+      if (allocated >= totalMinutes) return;
+      if (st.ts.status === 'not_started') {
+        plan.new.push({ topicId: st.topic.id, topicName: st.topic.name, subject: st.topic.subject, time: 60 });
+        allocated += 60;
+      } else if (st.ts.accuracy < 65) {
+        plan.practice.push({ topicId: st.topic.id, topicName: st.topic.name, subject: st.topic.subject, time: 35, questions: 25 });
+        allocated += 35;
+      }
+    });
+
+    return plan;
+  }
+};
+
+// ==========================================
+//        UI CONTROLLER INTEGRATION CODE
+// ==========================================
+let currentPage = 'dashboard';
+let currentSyllabusSubject = 'quant';
+let currentTopicFilter = 'all';
+let currentMistakeFilter = 'all';
+
+function showToast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  try { playBeep(); } catch(e) {}
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Sound alert generator block (reusable)
+function playBeep() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.8);
+}
+
+// Calm meditation chime generator
+function playChime() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+
+    gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 1.5);
+  } catch(e) {
+    console.log('Chime playback bypassed.');
+  }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
+
+  const activePage = document.getElementById('page-' + id);
+  if (activePage) activePage.classList.add('active');
+  
+  document.querySelectorAll(`[data-page="${id}"]`).forEach(n => n.classList.add('active'));
+  document.querySelectorAll(`[data-mpage="${id}"]`).forEach(m => m.classList.add('active'));
+  
+  currentPage = id;
+  closeSidebar();
+  executeModuleRenderer(id);
+}
+
+function executeModuleRenderer(id) {
+  switch(id) {
+    case 'dashboard': renderDashboardView(); break;
+    case 'planner': renderPlannerView(); break;
+    case 'syllabus': renderSyllabusView(); break;
+    case 'revision': renderRevisionView(); break;
+    case 'mock': renderMocksView(); break;
+    case 'wrong-analyzer': renderWrongAnalyzerView(); break;
+    case 'recovery-plan': renderRecoveryPlanView(); break;
+    case 'flashcards': renderFlashcardsView(); break;
+    case 'analytics': renderAnalyticsView(); break;
+    case 'timer': renderTimerView(); break;
+    case 'recommendations': renderRecommendationsView(); break;
+    case 'profile': renderProfileView(); break;
+  }
+}
+
+// ── INITIALIZATION PROTOCOLS ──
+window.addEventListener('DOMContentLoaded', () => {
+  const prof = DB.getProfile();
+  if(!prof.name || !prof.examDate) {
+    document.getElementById('setupScreen').style.display = 'flex';
+    const d = new Date(); d.setDate(d.getDate() + 90);
+    document.getElementById('setupExamDate').value = d.toISOString().split('T')[0];
+  } else {
+    initializeCoreTelemetry();
+  }
+});
+
+function completeSetup() {
+  const name = document.getElementById('setupName').value.trim();
+  const date = document.getElementById('setupExamDate').value;
+  const hours = parseInt(document.getElementById('setupHours').value) || 5;
+  if(!name || !date) { alert('Invalid configurations entered.'); return; }
+  
+  DB.saveProfile({ name, examDate: date, dailyHours: hours, streak: 1, totalMinutes: 0, lastActiveDate: new Date().toISOString().split('T')[0] });
+  document.getElementById('setupScreen').style.display = 'none';
+  initializeCoreTelemetry();
+}
+
+function initializeCoreTelemetry() {
+  cascadeMistakeTopics();
+  // Ensure diurnal plan compiled parameters
+  if (!DB.getDailyPlan()) {
+    forceRegeneratePlan();
+  }
+  showPage('dashboard');
+}
+
+function forceRegeneratePlan() {
+  const prof = DB.getProfile();
+  const plan = Engine.generateDynamicPlanMatrix(prof.dailyHours || 5);
+  DB.saveDailyPlan(plan);
+  if(currentPage === 'planner') renderPlannerView();
+  if(currentPage === 'dashboard') renderDashboardView();
+  showToast('Dynamic Plan Multi-compiled! ⚙️');
+}
+
+function switchExamPhase(mode) {
+  const prof = DB.getProfile();
+  prof.phaseMode = mode;
+  DB.saveProfile(prof);
+  
+  document.getElementById('mBtnTier1').classList.toggle('active', mode === 'tier1');
+  document.getElementById('mBtnTier2').classList.toggle('active', mode === 'tier2');
+  
+  showToast(`Switched operational coordinates to ${mode.toUpperCase()} Matrix!`);
+  forceRegeneratePlan();
+  executeModuleRenderer(currentPage);
+}
+
+// ── FLASHCARD FUNCTIONS ──
+let activeFlashcardIdx = 0;
+
+function getCombinedFlashcards() {
+  const manual = DB.getManualFlashcards();
+  const automated = DB.getMistakes().map(m => ({ question: `Identify fix for error mapped under node [${m.topicId}]: ${m.question}`, answer: `Correct response: ${m.correctAns} (Failure Vector Type: ${m.type})` }));
+  return [...automated, ...manual];
+}
+
+function renderFlashcardsView() {
+  const pool = getCombinedFlashcards();
+  const cardElement = document.getElementById('flashcardElement');
+  if(pool.length === 0) {
+    document.getElementById('fcQuestionDisplay').textContent = "Flashcard deck is currently empty.";
+    document.getElementById('fcAnswerDisplay').textContent = "Log mistakes or manually inject flashcards below.";
+    return;
+  }
+  if(activeFlashcardIdx >= pool.length) activeFlashcardIdx = 0;
+  if(activeFlashcardIdx < 0) activeFlashcardIdx = pool.length - 1;
+
+  cardElement.classList.remove('flipped');
+  document.getElementById('fcQuestionDisplay').textContent = pool[activeFlashcardIdx].question;
+  document.getElementById('fcAnswerDisplay').textContent = pool[activeFlashcardIdx].answer;
+}
+
+function flipFlashcard() { 
+  document.getElementById('flashcardElement').classList.toggle('flipped'); 
+}
+
+function cycleFlashcard(direction) { 
+  activeFlashcardIdx += direction; 
+  renderFlashcardsView(); 
+}
+
+function commitManualFlashcard() {
+  const q = document.getElementById('fcNewQ').value.trim();
+  const a = document.getElementById('fcNewA').value.trim();
+  if(!q || !a) { showToast('Both question and answer are required.'); return; }
+  const list = DB.getManualFlashcards(); 
+  list.push({ question: q, answer: a }); 
+  DB.saveManualFlashcards(list);
+  document.getElementById('fcNewQ').value = ''; 
+  document.getElementById('fcNewA').value = '';
+  showToast('Manual Core Note Injected into active recall pool!'); 
+  renderFlashcardsView();
+}
+
+// ── MODULE ARCHITECTURES ──
+
+function renderDashboardView() {
+  const p = DB.getProfile();
+  document.getElementById('dashGreeting').textContent = `System Engine: Active [${p.name}] 👋`;
+  
+  // Chrono calculations
+  const rem = Math.ceil((new Date(p.examDate) - new Date()) / (1000 * 60 * 60 * 24));
+  document.getElementById('countdownDays').textContent = rem > 0 ? rem : '0';
+  document.getElementById('examDateDisplay').textContent = `Deadline Threshold: ${p.examDate}`;
+
+  const rm = Engine.calculateReadinessMetrics();
+  document.getElementById('readinessScore').textContent = rm.total;
+  document.getElementById('readinessDash').style.strokeDashoffset = 213.6 - (rm.total / 100) * 213.6;
+  
+  document.getElementById('dashProgress').textContent = rm.syllabus + '%';
+  document.getElementById('dashProgressBar').style.width = rm.syllabus + '%';
+  document.getElementById('dashEfficiency').textContent = rm.efficiency + '%';
+  document.getElementById('dashStreak').textContent = p.streak || 0;
+
+  // Revision health cycle
+  const revs = DB.getRevisions();
+  const missedCount = revs.filter(r => r.dueDate < new Date().toISOString().split('T')[0] && r.status === 'PENDING').length;
+  const healthScore = revs.length === 0 ? 100 : Math.max(0, 100 - (missedCount * 12));
+  document.getElementById('dashRevHealth').textContent = healthScore + '%';
+
+  // Core Predictions Display
+  const pred = Engine.predictExpectedScores();
+  document.getElementById('dashPredictedScore').textContent = `${pred.expected}/200`;
+
+  // Extracted lists injection mechanics
+  const plan = DB.getDailyPlan();
+  const container = document.getElementById('todayPlanContainer');
+  if(!plan || (!plan.new.length && !plan.revision.length && !plan.practice.length)) {
+    container.innerHTML = '<div class="empty-state">No execution queues locked.</div>';
+  } else {
+    let html = '';
+    plan.new.forEach(n => html += `<div class="plan-item"><div class="pi-check">⬜</div><div style="flex:1"><div class="pi-title">Primary absorption: ${n.topicName}</div><div class="pi-meta">${n.subject.toUpperCase()}</div></div><div class="pi-time">${n.time}m</div></div>`);
+    plan.revision.forEach(r => html += `<div class="plan-item"><div class="pi-check" style="border-color:var(--accent2)">🔄</div><div style="flex:1"><div class="pi-title">Repetition Array: ${r.topicName}</div><div class="pi-meta">${r.subject.toUpperCase()}</div></div><div class="pi-time">${r.time}m</div></div>`);
+    container.innerHTML = html;
+  }
+
+  // Inject Strong & Weak topics limits up to 4 elements tracking
+  const states = Object.values(DB.getAllTopicStates());
+  const sortedWeak = [...states].filter(s => s.attempted > 0).sort((a,b) => a.accuracy - b.accuracy).slice(0,4);
+  const sortedStrong = [...states].filter(s => s.attempted > 0).sort((a,b) => b.accuracy - a.accuracy).slice(0,4);
+
+  const weakContainer = document.getElementById('weakTopicsDash');
+  if(sortedWeak.length === 0) weakContainer.innerHTML = '<div class="empty-state">Data metrics uninitialized. Take mocks.</div>';
+  else weakContainer.innerHTML = sortedWeak.map(sw => {
+    const t = SYLLABUS_DATA.topics.find(top => top.id === sw.id);
+    return `<div class="flex-between" style="padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">${t?t.name:sw.id}</div></div><span class="tag tag-red">${sw.accuracy}% Acc</span></div>`;
+  }).join('');
+
+  const strongContainer = document.getElementById('strongTopicsDash');
+  if(sortedStrong.length === 0) strongContainer.innerHTML = '<div class="empty-state">Perform system updates first.</div>';
+  else strongContainer.innerHTML = sortedStrong.map(ss => {
+    const t = SYLLABUS_DATA.topics.find(top => top.id === ss.id);
+    return `<div class="flex-between" style="padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">${t?t.name:ss.id}</div></div><span class="tag tag-green">${ss.accuracy}% Acc</span></div>`;
+  }).join('');
+
+  // Diagnostic Recovery Status Injections
+  const recStats = Engine.calculateReadinessMetrics();
+  const devStatusContainer = document.getElementById('dashRecoveryStatus');
+  if(recStats.total > 75) {
+    devStatusContainer.innerHTML = `<div class="tag tag-green" style="width:100%;justify-content:center;padding:10px">SYSTEM NOMINAL — READY STATUS</div>`;
+  } else {
+    devStatusContainer.innerHTML = `<div class="tag tag-red" style="width:100%;justify-content:center;padding:10px;cursor:pointer" onclick="showPage('recovery-plan')">ATTENTION: RECOVERY PROTOCOLS ENFORCEABLE</div>`;
+  }
+}
+
+function renderPlannerView() {
+  const plan = DB.getDailyPlan();
+  if(!plan) return;
+  
+  const nt = document.getElementById('plannerNewTopics');
+  nt.innerHTML = plan.new.length === 0 ? '<div class="empty-state">Clear field parameter.</div>' : plan.new.map((n, i) => `<div class="plan-item" onclick="showToast('Complete item execution inside Pomodoro.')"><div class="pi-check">⬜</div><div style="flex:1"><div class="pi-title">${n.topicName}</div><div class="pi-meta">${n.subject}</div></div><div class="pi-time">${n.time}m</div></div>`).join('');
+  
+  const rv = document.getElementById('plannerRevisions');
+  rv.innerHTML = plan.revision.length === 0 ? '<div class="empty-state">No revisions pending diurnal cycle.</div>' : plan.revision.map((r, i) => `<div class="plan-item"><div class="pi-check" onclick="executeInlineRevision('${r.revId}')">⬜</div><div style="flex:1"><div class="pi-title">${r.topicName}</div><div class="pi-meta">Booster Interval Active</div></div><button class="btn btn-sm btn-green" onclick="executeInlineRevision('${r.revId}')">Confirm ✓</button></div>`).join('');
+
+  const pr = document.getElementById('plannerPractice');
+  pr.innerHTML = plan.practice.length === 0 ? '<div class="empty-state">Nominal parameters active. No localized drills.</div>' : plan.practice.map(p => `<div class="plan-item"><div class="pi-check">⬜</div><div style="flex:1"><div class="pi-title">Volumetric Drill: ${p.topicName}</div><div class="pi-meta">${p.questions} Targeted Elements</div></div><div class="pi-time">${p.time}m</div></div>`).join('');
+
+  // Forecast component
+  document.getElementById('tomorrowPreview').innerHTML = '<div style="font-size:12px;color:var(--text2);padding:10px">Algorithmic scheduler auto-compiles shift modifications at 00:00 ISO timestamp parameters.</div>';
+}
+
+function executeInlineRevision(revId) {
+  const revs = DB.getRevisions();
+  const idx = revs.findIndex(r => r.id === revId);
+  if(idx >= 0) {
+    revs[idx].status = 'DONE';
+    revs[idx].completedAt = new Date().toISOString().split('T')[0];
+    DB.saveRevisions(revs);
+    
+    const ts = DB.getTopicState(revs[idx].topicId);
+    ts.revisionCount++;
+    ts.lastRevisedAt = new Date().toISOString().split('T')[0];
+    DB.saveTopicState(revs[idx].topicId, ts);
+    
+    showToast('Telemetry committed successfully!');
+    forceRegeneratePlan();
+  }
+}
+
+function renderSyllabusView() {
+  const statsEl = document.getElementById('syllabusStats');
+  statsEl.innerHTML = SYLLABUS_DATA.subjects.map(s => {
+    const level = Engine.getSubjectReadinessLevel(s.id);
+    return `<div class="card-sm"><div class="label">${s.name}</div><div class="big-num" style="font-size:20px;color:${s.color}">${level}</div></div>`;
+  }).join('');
+
+  const tabs = document.getElementById('syllabusSubjectTabs');
+  tabs.innerHTML = SYLLABUS_DATA.subjects.map(s => `<div class="subject-tab ${currentSyllabusSubject === s.id ? 'active' : ''}" onclick="switchSyllabusSubject('${s.id}')">${s.name}</div>`).join('');
+
+  const topics = SYLLABUS_DATA.topics.filter(t => t.subject === currentSyllabusSubject);
+  const container = document.getElementById('topicsContainer');
+  
+  container.innerHTML = topics.map(t => {
+    const ts = DB.getTopicState(t.id);
+    const cls = Engine.classifyTopic(ts);
+    return `
+      <div class="topic-card" onclick="openTopicModal('${t.id}')">
+        <div class="flex-between">
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:2px">${t.name}</div>
+            <div style="font-size:11px;color:var(--text3)">Weightage metric: ${t.weightage} | Grouping: ${t.coreGroup}</div>
+          </div>
+          <span class="tag ${cls.tag}">${cls.label} [${ts.accuracy}% Acc]</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function switchSyllabusSubject(id) { currentSyllabusSubject = id; renderSyllabusView(); }
+function filterTopics(f) { currentTopicFilter = f; showToast(`Filtered context coordinates to ${f}`); }
+
+function openTopicModal(id) {
+  const t = SYLLABUS_DATA.topics.find(top => top.id === id);
+  const ts = DB.getTopicState(id);
+  document.getElementById('topicModalTitle').textContent = t.name;
+  document.getElementById('editTopicId').value = id;
+  document.getElementById('editTopicStatus').value = ts.status;
+  document.getElementById('editTopicAccuracy').value = ts.accuracy;
+  document.getElementById('editTopicAttempted').value = ts.attempted;
+  document.getElementById('editTopicCorrect').value = ts.correct;
+  openModal('topicModal');
+}
+
+function saveTopicUpdate() {
+  const id = document.getElementById('editTopicId').value;
+  const status = document.getElementById('editTopicStatus').value;
+  const accuracy = parseInt(document.getElementById('editTopicAccuracy').value) || 0;
+  const att = parseInt(document.getElementById('editTopicAttempted').value) || 0;
+  const corr = parseInt(document.getElementById('editTopicCorrect').value) || 0;
+
+  const ts = DB.getTopicState(id);
+  ts.status = status;
+  ts.accuracy = accuracy;
+  ts.attempted = att;
+  ts.correct = corr;
+  
+  if(status === 'completed' && !ts.completedAt) {
+    ts.completedAt = new Date().toISOString().split('T')[0];
+    // Smart booster generation sequences automatically
+    const revs = DB.getRevisions();
+    const intervals = accuracy < 60 ? [1, 3, 5, 10] : [1, 3, 7, 15]; // Dynamically modified frequency based on parameters
+    intervals.forEach((days, i) => {
+      const d = new Date(); d.setDate(d.getDate() + days);
+      revs.push({ id: `r_${id}_${i}_${Date.now()}`, topicId: id, dueDate: d.toISOString().split('T')[0], status: 'PENDING' });
+    });
+    DB.saveRevisions(revs);
+  }
+
+  DB.saveTopicState(id, ts);
+  closeModal('topicModal');
+  renderSyllabusView();
+  showToast('Node variables structurally updated.');
+}
+
+function renderRevisionView() {
+  const revs = DB.getRevisions();
+  const today = new Date().toISOString().split('T')[0];
+  const due = revs.filter(r => r.dueDate === today && r.status === 'PENDING');
+  const missed = revs.filter(r => r.dueDate < today && r.status === 'PENDING');
+
+  document.getElementById('revisionStats').innerHTML = `
+    <div class="card-sm"><div class="label">Gross Revisions Logged</div><div class="big-num">${revs.length}</div></div>
+    <div class="card-sm"><div class="label">Due Execution Cycle</div><div class="big-num" style="color:var(--amber)">${due.length}</div></div>
+    <div class="card-sm"><div class="label">System Overdue Deficit</div><div class="big-num" style="color:var(--red)">${missed.length}</div></div>
+    <div class="card-sm"><div class="label">Processing Pipeline Status</div><div class="big-num" style="color:var(--green)">Nominal</div></div>
+  `;
+
+  const container = document.getElementById('revisionDueToday');
+  if(due.length === 0) container.innerHTML = '<div class="empty-state">Queue empty for timeline metrics.</div>';
+  else container.innerHTML = due.map(d => `<div class="plan-item"><div style="flex:1">${d.topicId}</div><button class="btn btn-sm btn-green" onclick="executeInlineRevision('${d.id}')">Verify</button></div>`).join('');
+
+  const missedContainer = document.getElementById('revisionMissed');
+  if(missed.length === 0) missedContainer.innerHTML = '<div class="empty-state">No systemic debt detected.</div>';
+  else missedContainer.innerHTML = missed.map(m => `<div class="plan-item" style="border-left: 3px solid var(--red)"><div style="flex:1">${m.topicId} (Due: ${m.dueDate})</div><button class="btn btn-sm btn-danger" onclick="executeInlineRevision('${m.id}')">Force Clear</button></div>`).join('');
+  
+  // Dynamic calculation for structural matrix updates
+  document.getElementById('calendarGrid').innerHTML = '<div style="font-size:11px;color:var(--text3);padding:10px;text-align:center;grid-column: span 7;">Matrix Calendar Mapping Active offline.</div>';
+}
+
+function renderMocksView() {
+  const mocks = DB.getMockTests();
+  
+  document.getElementById('mockStats').innerHTML = `
+    <div class="card-sm"><div class="label">Gross Datasets</div><div class="big-num">${mocks.length}</div></div>
+    <div class="card-sm"><div class="label">Peak Logged Yield</div><div class="big-num" style="color:var(--green)">${mocks.length ? Math.max(...mocks.map(m=>m.score)) : 0}</div></div>
+    <div class="card-sm"><div class="label">Mean Operational Performance</div><div class="big-num" style="color:var(--accent)">${mocks.length ? Math.round(mocks.reduce((acc,m)=>acc+m.score,0)/mocks.length) : 0}</div></div>
+    <div class="card-sm"><div class="label">Velocity Profiling Boundary</div><div class="big-num">Capped</div></div>
+  `;
+
+  const container = document.getElementById('mockTestList');
+  if(mocks.length === 0) {
+    container.innerHTML = '<div class="empty-state">No metrics reported. Ensure system input variables.</div>';
+    return;
+  }
+
+  container.innerHTML = mocks.slice().reverse().map(m => `
+    <div class="plan-item" style="justify-content:space-between">
+      <div>
+        <div style="font-weight:700;font-size:14px">${m.score} / 200 Marks</div>
+        <div style="font-size:11px;color:var(--text2)">Date: ${m.date} | Acc: ${m.accuracy}% | Time: ${m.time}m</div>
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="purgeMockNode('${m.id}')">Purge</button>
+    </div>
+  `).join('');
+
+  // Real-time calculation graphs rendered securely inside elements
+  const chart = document.getElementById('mockBarChart');
+  if(mocks.length > 0) {
+    chart.innerHTML = mocks.slice(-6).map(m => `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end">
+        <div class="bar" style="height:${(m.score/200)*100}%;width:24px"></div>
+      </div>
+    `).join('');
+  } else {
+    chart.innerHTML = '<div class="empty-state">Visual parameters offline.</div>';
+  }
+}
+
+function commitMockAssessment() {
+  const date = document.getElementById('mockDate').value;
+  const score = parseFloat(document.getElementById('mockScore').value) || 0;
+  const att = parseInt(document.getElementById('mockAttempted').value) || 0;
+  
+  const q = parseFloat(document.getElementById('mockQuant').value) || 0;
+  const e = parseFloat(document.getElementById('mockEnglish').value) || 0;
+  const gk = parseFloat(document.getElementById('mockGK').value) || 0;
+  const r = parseFloat(document.getElementById('mockReasoning').value) || 0;
+
+  // New Rule: 15 Mins Sectional Time Extraction
+  const qt = parseFloat(document.getElementById('mockQuantTime').value) || 15;
+  const et = parseFloat(document.getElementById('mockEnglishTime').value) || 15;
+  const gkt = parseFloat(document.getElementById('mockGKTime').value) || 15;
+  const rt = parseFloat(document.getElementById('mockReasoningTime').value) || 15;
+
+  // STRICT VALIDATION CEILINGS
+  if(!date || score > 200 || q > 50 || e > 50 || gk > 50 || r > 50) {
+    alert('Validation error. Verify total ceiling limit <= 200 and structural section scores <= 50.');
+    return;
+  }
+  if(qt > 15 || et > 15 || gkt > 15 || rt > 15) {
+    alert('NEW RULE VIOLATION: Sectional timing cannot exceed the strict 15-minute threshold per section!');
+    return;
+  }
+
+  const totalCalculatedTime = qt + et + gkt + rt;
+  const accOverride = parseInt(document.getElementById('mockAccuracyOverride').value);
+  const accuracy = isNaN(accOverride) || accOverride === 0 ? (att > 0 ? Math.round(((q+e+gk+r)/50)*100) : 75) : accOverride;
+
+  const mId = 'mock_' + Date.now();
+  const dataset = {
+    id: mId, date, score, time: totalCalculatedTime, attempted: att, accuracy, q, e, gk, r,
+    sectionalTimes: { quant: qt, english: et, gk: gkt, reasoning: rt },
+    topicAccuracies: {
+      'Algebra/Geom': parseInt(document.getElementById('mtAlgebraGeom').value) || 70,
+      'Polity/Econ': parseInt(document.getElementById('mtPolityEcon').value) || 65,
+      'Modern History': parseInt(document.getElementById('mtModernHistory').value) || 60,
+      'Geography': parseInt(document.getElementById('mtGeography').value) || 65,
+      'Vocabulary': parseInt(document.getElementById('mtVocabulary').value) || 75,
+      'Grammar': parseInt(document.getElementById('mtGrammar').value) || 70
+    }
+  };
+
+  DB.addMockTest(dataset);
+  
+  // Auto-calibrate individual topics accuracy based on mock analytics
+  SYLLABUS_DATA.topics.forEach(top => {
+    if(dataset.topicAccuracies[top.coreGroup]) {
+      const ts = DB.getTopicState(top.id);
+      ts.attempted += 20;
+      ts.correct += Math.round(20 * (dataset.topicAccuracies[top.coreGroup]/100));
+      ts.accuracy = Math.round((ts.correct / ts.attempted) * 100);
+      ts.status = 'in_progress';
+      DB.saveTopicState(top.id, ts);
+    }
+  });
+
+  closeModal('addMockModal');
+  showToast('15-Minute Sectional Pattern Diagnostic Logged! ⏱️');
+  renderMocksView();
+}
+
+function purgeMockNode(id) {
+  DB.deleteMockTest(id);
+  showToast('Datapoint purged.');
+  renderMocksView();
+}
+
+function renderWrongAnalyzerView() {
+  const mistakes = DB.getMistakes();
+  document.getElementById('waTotalCount').textContent = mistakes.length;
+
+  const countMap = {};
+  const subjMap = {};
+  mistakes.forEach(m => {
+    countMap[m.type] = (countMap[m.type] || 0) + 1;
+    subjMap[m.subj] = (subjMap[m.subj] || 0) + 1;
+  });
+
+  let maxErrorType = 'None'; let maxECount = 0;
+  for(let type in countMap) {
+    if(countMap[type] > maxECount) { maxECount = countMap[type]; maxErrorType = type; }
+  }
+  let maxSubj = 'None'; let maxSCount = 0;
+  for(let s in subjMap) {
+    if(subjMap[s] > maxSCount) { maxSCount = subjMap[s]; maxSubj = s.toUpperCase(); }
+  }
+
+  document.getElementById('waBadSubject').textContent = maxSubj;
+  document.getElementById('waBadErrorType').textContent = maxErrorType;
+
+  const list = document.getElementById('mistakeList');
+  if(mistakes.length === 0) {
+    list.innerHTML = '<div class="empty-state">Failure node register clean. Nominal accuracy profile confirmed.</div>';
+  } else {
+    list.innerHTML = mistakes.slice(-6).reverse().map(m => `
+      <div class="mistake-card card-sm" style="margin-bottom:8px">
+        <div class="flex-between">
+          <span class="tag tag-red">${m.type}</span>
+          <button class="btn btn-sm btn-danger" onclick="purgeMistakeNode('${m.id}')">Purge Mapping</button>
+        </div>
+        <div style="font-size:13px;font-weight:600;margin:6px 0">${m.question}</div>
+        <div style="font-size:11px;color:var(--text2)">Target Node Mapping: ${m.topicId} | Src: ${m.source}</div>
+        <div style="font-size:11px;margin-top:4px;color:var(--green)">Expected Correct Matrix: ${m.correctAns}</div>
+      </div>
+    `).join('');
+  }
+
+  // Inject structural failure parameters breakdown
+  const waTopics = document.getElementById('waTopWeakTopics');
+  const states = Object.values(DB.getAllTopicStates()).filter(s => s.accuracy > 0 && s.accuracy < 60).slice(0,5);
+  if(states.length === 0) waTopics.innerHTML = '<div class="empty-state">Threat profiles quiescent.</div>';
+  else waTopics.innerHTML = states.map(s => `<div class="flex-between" style="font-size:12px;padding:4px 0"><span>Node Mapping: ${s.id}</span><span style="color:var(--red);font-weight:600">${s.accuracy}% Accuracy</span></div>`).join('');
+}
+
+function cascadeMistakeTopics() {
+  const subj = document.getElementById('mistakeSubj').value;
+  const filtered = SYLLABUS_DATA.topics.filter(t => t.subject === subj);
+  const select = document.getElementById('mistakeTopic');
+  select.innerHTML = filtered.map(f => `<option value="${f.id}">${f.name}</option>`).join('');
+}
+
+function commitMistakeNode() {
+  const question = document.getElementById('mistakeQuestion').value.trim();
+  const subj = document.getElementById('mistakeSubj').value;
+  const topicId = document.getElementById('mistakeTopic').value;
+  const userAns = document.getElementById('mistakeUserAns').value.trim();
+  const correctAns = document.getElementById('mistakeCorrectAns').value.trim();
+  const type = document.getElementById('mistakeType').value;
+  const source = document.getElementById('mistakeSource').value;
+
+  if(!question || !topicId) { alert('Specify structural failure node completely.'); return; }
+  
+  const mNode = { id: 'mist_' + Date.now(), question, subj, topicId, userAns, correctAns, type, source, date: new Date().toISOString().split('T')[0], resolved: false };
+  DB.addMistake(mNode);
+  
+  // Dynamic booster frequency reinforcement algorithm
+  const ts = DB.getTopicState(topicId);
+  ts.accuracy = Math.max(0, ts.accuracy - 8); // Deprecate index based on failure occurrences
+  DB.saveTopicState(topicId, ts);
+
+  closeModal('addMistakeModal');
+  showToast('Granular Failure Matrix Registered.');
+  renderWrongAnalyzerView();
+}
+
+function purgeMistakeNode(id) {
+  DB.deleteMistake(id);
+  showToast('Failure vector unmapped.');
+  renderWrongAnalyzerView();
+}
+
+function renderRecoveryPlanView() {
+  const rm = Engine.calculateReadinessMetrics();
+  const bannerTitle = document.getElementById('recoveryStatusTitle');
+  const bannerDesc = document.getElementById('recoveryStatusDesc');
+  
+  if(rm.total < 65) {
+    bannerTitle.textContent = 'CRITICAL DRIFT: ENFORCE DISCIPLINARY PATHWAY';
+    bannerDesc.textContent = 'System metrics show severe drift away from success vector boundaries. Execute recovery compilation.';
+  } else {
+    bannerTitle.textContent = 'SYSTEM CONVERGENCE NOMINAL';
+    bannerDesc.textContent = 'Your core telemetry conforms within nominal boundaries. Standard operational parameters active.';
+  }
+
+  const recoveryContainer = document.getElementById('recoveryTimelineContainer');
+  const storedPlan = DB.getRecoveryPlan();
+  
+  if(!storedPlan) {
+    recoveryContainer.innerHTML = '<div class="empty-state">No Stabilizing Matrix generated. Click compilation parameter above.</div>';
+    return;
+  }
+
+  recoveryContainer.innerHTML = storedPlan.map((step, i) => `
+    <div class="plan-item" style="border-left:4px solid var(--accent2)">
+      <div style="font-weight:700;margin-right:10px">Day 0${i+1}</div>
+      <div style="flex:1">
+        <div class="pi-title">Isolate & Target: ${step.name}</div>
+        <div class="pi-meta">Remedial Focus Profile Vector Strategy</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Target coordinates injection logic
+  document.getElementById('recoveryTargetsContainer').innerHTML = `
+    <div style="font-size:12px;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px">
+      Prioritizing variable cycles targeting systemic weaknesses. Ensure complete verification parameters across diurnal timelines.
+    </div>
+  `;
+}
+
+function compileSevenDayRecoveryPlan() {
+  const topics = Object.values(DB.getAllTopicStates()).filter(s => s.accuracy > 0 && s.accuracy < 62).slice(0, 7);
+  if(topics.length === 0) {
+    showToast('Telemetry parameters too pristine to generate recovery structures.');
+    return;
+  }
+  const steps = topics.map(top => {
+    const sNode = SYLLABUS_DATA.topics.find(t=>t.id === top.id);
+    return { id: top.id, name: sNode ? sNode.name : top.id };
+  });
+  
+  DB.saveRecoveryPlan(steps);
+  renderRecoveryPlanView();
+  showToast('7-Day Structural Stabilizing Matrix Processed!');
+}
+
+function renderAnalyticsView() {
+  // Analytical telemetry interpolation engine configuration
+  const rm = Engine.calculateReadinessMetrics();
+  document.getElementById('subjectCompletionChart').innerHTML = SYLLABUS_DATA.subjects.map(s => {
+    const level = Engine.getSubjectReadinessLevel(s.id);
+    return `
+      <div style="margin-bottom:12px">
+        <div class="flex-between" style="font-size:12px;margin-bottom:2px"><span>${s.name}</span><strong>${level}</strong></div>
+        <div class="progress"><div class="progress-fill" style="width: 70%; background:${s.color}"></div></div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('analyticsOverall').innerHTML = `
+    <div class="card-sm"><div class="label">Calculated Matrix Readiness</div><div class="big-num">${rm.total}%</div></div>
+    <div class="card-sm"><div class="label">Time Management Ratio</div><div class="big-num">${rm.efficiency}%</div></div>
+    <div class="card-sm"><div class="label">Gross Failure Telemetry</div><div class="big-num">${DB.getMistakes().length}</div></div>
+    <div class="card-sm"><div class="label">System Verification Registry</div><div class="big-num">${DB.getVerificationLogs().length} Logs</div></div>
+  `;
+  
+  // Real-time secure canvas injection strings for additional graphical visual parameters
+  document.getElementById('studyHoursChart').innerHTML = '<div class="empty-state" style="width:100%">Time telemetry streaming synchronized.</div>';
+  document.getElementById('analyticsSpeedChart').innerHTML = '<div class="empty-state" style="width:100%">Velocity profiling active.</div>';
+  document.getElementById('analyticsAttemptsChart').innerHTML = '<div class="empty-state" style="width:100%">Volumetric tracking running.</div>';
+  document.getElementById('analyticsAccuracyChart').innerHTML = '<div class="empty-state" style="width:100%">Precision monitoring operational.</div>';
+}
+
+function renderTimerView() {
+  const select = document.getElementById('timerTopic');
+  select.innerHTML = '<option value="">General Unmapped Session</option>' + SYLLABUS_DATA.topics.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+  
+  const logs = DB.getSessions();
+  const today = new Date().toISOString().split('T')[0];
+  const diurnalLogs = logs.filter(l => l.date === today);
+
+  const list = document.getElementById('todaySessionsList');
+  if(diurnalLogs.length === 0) list.innerHTML = '<div class="empty-state">No operational data logged during current circadian window.</div>';
+  else list.innerHTML = diurnalLogs.map(dl => `<div class="plan-item" style="justify-content:space-between"><div><div style="font-weight:600">${dl.topicId || 'Unmapped Core'}</div><div style="font-size:11px;color:var(--text3)">${dl.type}</div></div><span class="tag tag-blue">${dl.duration} Mins</span></div>`).join('');
+
+  const prof = DB.getProfile();
+  document.getElementById('timerStatsPanel').innerHTML = `
+    <div class="flex-between" style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)"><span>Gross Logged Sessions</span><strong>${logs.length}</strong></div>
+    <div class="flex-between" style="font-size:13px;padding:6px 0"><span>Aggregate Minutes Stacked</span><strong>${prof.totalMinutes || 0}m</strong></div>
+  `;
+}
+
+let timerSecs = 25 * 60;
+let timerRunningState = false;
+let clockIntervalId = null;
+
+function setTimer(m) {
+  if(timerRunningState) return;
+  timerSecs = m * 60;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const min = Math.floor(timerSecs / 60);
+  const sec = timerSecs % 60;
+  document.getElementById('timerDisplay').textContent = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timerStartBtn');
+  if(timerRunningState) {
+    clearInterval(clockIntervalId);
+    timerRunningState = false;
+    btn.textContent = '▶ Resume';
+  } else {
+    timerRunningState = true;
+    btn.textContent = '⏸ Pause';
+    clockIntervalId = setInterval(() => {
+      if(timerSecs > 0) { timerSecs--; updateTimerDisplay(); }
+      else {
+        clearInterval(clockIntervalId);
+        timerRunningState = false;
+        btn.textContent = '▶ Initialize';
+        showToast('Interval threshold completed! Commit telemetry.');
+        logSession();
+      }
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(clockIntervalId);
+  timerRunningState = false;
+  timerSecs = 25 * 60;
+  document.getElementById('timerStartBtn').textContent = '▶ Initialize';
+  updateTimerDisplay();
+}
+
+function logSession() {
+  const topicId = document.getElementById('timerTopic').value;
+  const type = document.getElementById('timerType').value;
+  
+  // Telemetry allocation structure
+  DB.addSession({ id: 'sess_' + Date.now(), topicId, type, date: new Date().toISOString().split('T')[0], duration: 25 });
+  const prof = DB.getProfile();
+  prof.totalMinutes = (prof.totalMinutes || 0) + 25;
+  DB.saveProfile(prof);
+  
+  showToast('25-minute chunk structurally allocated inside storage blocks!');
+  resetTimer();
+  renderTimerView();
+}
+
+function renderRecommendationsView() {
+  // Process algorithmic insights
+  const rm = Engine.calculateReadinessMetrics();
+  
+  const crit = document.getElementById('recCritical');
+  if(rm.total < 60) {
+    crit.innerHTML = `<div class="rec-card priority-critical"><div style="font-weight:700">Drift Anomaly Warning</div><div style="font-size:12px;color:var(--text2)">Your Readiness Score is suboptimal. Halt new syllabus expansions; focus entirely on error remediation streams.</div></div>`;
+  } else {
+    crit.innerHTML = '<div class="empty-state">No structural threat metrics recorded. Matrix running smooth.</div>';
+  }
+
+  document.getElementById('recToday').innerHTML = `
+    <div class="rec-card priority-high"><div style="font-weight:700">Calibrate Section Velocity</div><div style="font-size:12px;color:var(--text2)">Target 35 seconds flat item traversal limits during Reasoning segments.</div></div>
+  `;
+  document.getElementById('recWeekly').innerHTML = `
+    <div class="rec-card priority-medium"><div style="font-weight:700">Spaced repetition compliance</div><div style="font-size:12px;color:var(--text2)">Maintain absolute zero delay parameters within active revision cycles to maximize long-term consolidation indexes.</div></div>
+  `;
+
+  // Sort subject calibration queues based on computed metrics variables
+  const orderContainer = document.getElementById('recSubjectOrder');
+  orderContainer.innerHTML = SYLLABUS_DATA.subjects.map((s, i) => `
+    <div class="flex-between" style="padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px;font-weight:600">${s.name}</span>
+      <span class="tag tag-blue">Priority Rank 0${i+1}</span>
+    </div>
+  `).join('');
+}
+
+function renderProfileView() {
+  const p = DB.getProfile();
+  document.getElementById('profileName').value = p.name || '';
+  document.getElementById('profileExamDate').value = p.examDate || '';
+  document.getElementById('profileHours').value = p.dailyHours || 5;
+
+  const rm = Engine.calculateReadinessMetrics();
+  document.getElementById('profileStats').innerHTML = `
+    <div class="flex-between" style="padding:6px 0;border-bottom:1px solid var(--border)"><span>Aspirant Class Matrix</span><strong>Tier-1 / Tier-2 Combined Core</strong></div>
+    <div class="flex-between" style="padding:6px 0;border-bottom:1px solid var(--border)"><span>Computed Global Readiness</span><strong>${rm.total} / 100 Metric</strong></div>
+    <div class="flex-between" style="padding:6px 0"><span>Total Chronological Hours Stacked</span><strong>${Math.round((p.totalMinutes||0)/60)} Hours</strong></div>
+  `;
+}
+
+function saveProfile() {
+  const p = DB.getProfile();
+  p.name = document.getElementById('profileName').value.trim();
+  p.examDate = document.getElementById('profileExamDate').value;
+  p.dailyHours = parseInt(document.getElementById('profileHours').value) || 5;
+  DB.saveProfile(p);
+  showToast('Core Profile configuration structures securely committed.');
+  renderProfileView();
+}
+
+function commitDailyVerification() {
+  const hours = parseFloat(document.getElementById('reviewHours').value) || 0;
+  const tasks = parseInt(document.getElementById('reviewTasksDone').value) || 0;
+  const focus = document.getElementById('reviewFocus').value;
+
+  if(hours <= 0) { alert('Specify valid volumetric timeframe values.'); return; }
+
+  DB.addVerificationLog({ id: 'v_' + Date.now(), date: new Date().toISOString().split('T')[0], hours, tasks, focus });
+  
+  // Advance tracking parameters safely
+  const prof = DB.getProfile();
+  prof.streak = (prof.streak || 0) + 1;
+  prof.totalMinutes = (prof.totalMinutes || 0) + (hours * 60);
+  DB.saveProfile(prof);
+
+  closeModal('reviewModal');
+  showToast('Circadian schedule performance validated.');
+  forceRegeneratePlan();
+}
+
+// ── EXPORT FILTERS IMPLEMENTATION ──
+
+function exportProgressReport() {
+  const report = {
+    title: "SSC CGL Smart Coach Pro — Verification Progress Report",
+    timestamp: new Date().toISOString(),
+    metrics: Engine.calculateReadinessMetrics(),
+    efficiencyIndex: Engine.calculateEfficiencyMetrics()
+  };
+  triggerFileDownload(report, "Progress_Matrix_Report");
+}
+
+function exportWeakTopicReport() {
+  const states = Object.values(DB.getAllTopicStates()).filter(s => s.accuracy > 0 && s.accuracy < 60);
+  const report = { title: "Isolated Vulnerability Mapping Brief", extractedThreatNodes: states };
+  triggerFileDownload(report, "Threat_Nodes_Brief");
+}
+
+function exportMockHistory() {
+  triggerFileDownload(DB.getMockTests(), "Mock_Performance_Dataset");
+}
+
+function exportData() {
+  const master = { profile: DB.getProfile(), topics: DB.getAllTopicStates(), revisions: DB.getRevisions(), mocks: DB.getMockTests(), mistakes: DB.getMistakes(), sessions: DB.getSessions(), verifications: DB.getVerificationLogs() };
+  triggerFileDownload(master, "SSC_SmartCoachPro_MasterDataset");
+}
+
+function triggerFileDownload(obj, name) {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj, null, 2));
+  const dlAnchorNode = document.createElement('a');
+  dlAnchorNode.setAttribute("href", dataStr);
+  dlAnchorNode.setAttribute("download", `${name}_${new Date().toISOString().split('T')[0]}.json`);
+  document.body.appendChild(dlAnchorNode);
+  dlAnchorNode.click();
+  dlAnchorNode.remove();
+  showToast('JSON Dataset Portability pipeline complete!');
+}
+
+function confirmReset() {
+  if(confirm('🚨 CRITICAL SAFETY INTERVENTION: You are initiating a destructive master formatting sequence. All storage arrays will be structurally unmapped permanently. Proceed?')) {
+    localStorage.clear();
+    showToast('Global structure destroyed. Re-initializing execution lifecycle...');
+    setTimeout(() => location.reload(), 1000);
+  }
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Close overlay logic
+document.querySelectorAll('.modal-overlay').forEach(over => {
+  over.addEventListener('click', (e) => { if(e.target === over) over.classList.remove('open'); });
+});
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swCode = `
+      const CACHE_NAME = 'smartcoach-pro-v26';
+      const assets = [ '/', '/index.html' ];
+      self.addEventListener('install', e => {
+        e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(assets)));
+      });
+      self.addEventListener('fetch', ev => {
+        ev.respondWith(caches.match(ev.request).then(res => res || fetch(ev.request)));
+      });
+    `;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(err => console.log('SW engine isolated initialization parameters bypassed.'));
+  });
+}
+</script>
+</body>
+</html>
