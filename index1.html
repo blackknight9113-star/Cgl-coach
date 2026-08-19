@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>SSC CGL Mock Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2A44;
+  --paper:#FBFAF6;
+  --paper-2:#F3EFE4;
+  --line:#D8D3C4;
+  --register-blue:#2C4A7C;
+  --register-blue-soft:#E7EDF6;
+  --red-pen:#C0392B;
+  --red-pen-soft:#FBEAE8;
+  --stamp-green:#2F7D5A;
+  --stamp-green-soft:#E7F3EC;
+  --amber:#B7791F;
+  --amber-soft:#FBF1E2;
+  --muted:#6B7280;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  background-image:linear-gradient(var(--line) 1px, transparent 1px);
+  background-size:100% 34px;
+  min-height:100vh;
+}
+.wrap{max-width:780px;margin:0 auto;padding:16px 14px 70px;}
+
+/* HEADER */
+.header{background:var(--ink);color:var(--paper);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;margin-bottom:12px;}
+.header::after{content:"";position:absolute;top:-40%;right:-10%;width:220px;height:220px;border:2px dashed rgba(251,250,246,0.15);border-radius:50%;}
+.header .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--register-blue-soft);opacity:.85;}
+.header h1{font-family:'Roboto Slab',serif;font-weight:900;font-size:24px;margin:4px 0 2px;}
+.header .sub{font-size:12.5px;color:#C9CFDC;}
+.header .stats{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;}
+.header .stat b{display:block;font-size:18px;color:#fff;font-family:'IBM Plex Mono',monospace;}
+.header .stat span{font-size:10px;color:#9AA5BD;text-transform:uppercase;letter-spacing:0.8px;}
+.storage-note{font-size:9.5px;color:#8892A8;margin-top:8px;font-family:'IBM Plex Mono',monospace;}
+
+/* TABS */
+.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;background:var(--paper-2);padding:4px;border-radius:9px;}
+.tab{flex:1 1 30%;min-width:80px;text-align:center;padding:8px 4px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--muted);user-select:none;transition:all .15s;}
+.tab.active{background:var(--ink);color:var(--paper);}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* Generic card */
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px;}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed var(--line);flex-wrap:wrap;gap:4px;}
+.card-head h3{font-family:'Roboto Slab',serif;font-size:15px;margin:0;font-weight:700;}
+.card-head .qcount{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;min-width:0;}
+.field-row.three{grid-template-columns:1fr 1fr 1fr;min-width:0;}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.field label{font-size:10.5px;color:var(--muted);font-weight:600;}
+.field input,.field select,.field textarea{
+  border:1px solid var(--line);border-radius:6px;padding:7px 8px;
+  font-family:'IBM Plex Mono',monospace;font-size:13px;background:var(--paper);
+  color:var(--ink);width:100%;min-width:0;
+}
+.field textarea{font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;resize:vertical;min-height:50px;}
+.field input.invalid,.field select.invalid{border-color:var(--red-pen);background:var(--red-pen-soft);}
+
+.err-row{display:grid;grid-template-columns:1fr 130px 26px;gap:6px;margin-bottom:6px;align-items:center;}
+.err-row input,.err-row select{border:1px solid var(--line);border-radius:6px;padding:6px 7px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;width:100%;min-width:0;}
+.err-row .rm{border:none;background:var(--red-pen-soft);color:var(--red-pen);border-radius:6px;height:28px;cursor:pointer;font-weight:700;}
+.add-err{background:none;border:1px dashed var(--register-blue);color:var(--register-blue);border-radius:6px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;margin-top:2px;}
+
+/* Unattempted Analysis (New Mock) */
+.reason-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;}
+.reason-field{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.reason-field label{font-size:9.5px;color:var(--muted);font-weight:600;word-break:break-word;}
+.reason-field input{border:1px solid var(--line);border-radius:6px;padding:5px 6px;font-family:'IBM Plex Mono',monospace;font-size:12px;width:100%;min-width:0;background:var(--paper);color:var(--ink);}
+.reason-field input:disabled{opacity:0.5;background:var(--paper-2);}
+.reason-field input.invalid{border-color:var(--red-pen);background:var(--red-pen-soft);}
+.ur-status{font-size:10.5px;margin-top:5px;font-weight:600;}
+.ur-status.ok{color:var(--stamp-green);}
+.ur-status.bad{color:var(--red-pen);}
+
+/* Timer dial */
+.timer-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.dial-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 4px 8px;text-align:center;}
+.dial-card .lbl{font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px;}
+.dial-card svg{display:block;margin:0 auto;}
+.dial-card .time-read{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;margin-top:2px;}
+.dial-card .budget{font-size:9px;color:var(--muted);}
+
+.total-preview{background:var(--register-blue-soft);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.total-preview .lbl{font-size:11px;color:var(--register-blue);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+.total-preview .val{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:var(--ink);}
+
+.error-banner{background:var(--red-pen-soft);border:1px solid var(--red-pen);color:var(--red-pen);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12.5px;}
+.error-banner ul{margin:4px 0 0;padding-left:18px;}
+
+.save-bar{position:sticky;bottom:10px;margin-top:14px;}
+.btn-save{width:100%;background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(31,42,68,0.25);}
+.btn-save:active{transform:translateY(1px);}
+.btn-sec{background:none;border:1px solid var(--register-blue);color:var(--register-blue);border-radius:8px;padding:9px 12px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn-sec.danger{border-color:var(--red-pen);color:var(--red-pen);}
+.btn-sec.green{border-color:var(--stamp-green);color:var(--stamp-green);}
+
+/* Dashboard */
+.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+@media(max-width:340px){.dash-grid{grid-template-columns:1fr;}}
+.tile{background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 12px;}
+.tile .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;font-weight:600;}
+.tile .val{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;margin-top:2px;}
+.tile.accent{background:var(--register-blue-soft);}
+.tile.warn{background:var(--red-pen-soft);}
+.tile.good{background:var(--stamp-green-soft);}
+
+.sec-perf-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px;}
+.sec-perf-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+.sec-perf-card .row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.sec-perf-card h4{font-family:'Roboto Slab',serif;font-size:14px;margin:0;}
+.sec-perf-card .mini-stats{display:flex;gap:12px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);}
+.sec-perf-card .mini-stats b{color:var(--ink);}
+.time-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;}
+.time-status.green{background:var(--stamp-green-soft);color:var(--stamp-green);}
+.time-status.yellow{background:var(--amber-soft);color:var(--amber);}
+.time-status.red{background:var(--red-pen-soft);color:var(--red-pen);}
+
+.highlight-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+@media(max-width:340px){.highlight-grid{grid-template-columns:1fr;}}
+.highlight-tile{background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 12px;min-width:0;}
+.highlight-tile .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:600;}
+.highlight-tile .val{font-family:'Roboto Slab',serif;font-size:14px;font-weight:700;margin-top:2px;word-break:break-word;}
+
+.coach-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px 0;margin-bottom:14px;overflow:hidden;}
+.coach-msg{padding:10px 14px;border-left:4px solid var(--register-blue);font-size:12.5px;border-bottom:1px dashed var(--line);}
+.coach-msg:last-child{border-bottom:none;}
+.coach-msg.warn{border-left-color:var(--red-pen);background:var(--red-pen-soft);}
+.coach-msg.good{border-left-color:var(--stamp-green);background:var(--stamp-green-soft);}
+.coach-msg.info{border-left-color:var(--register-blue);}
+
+/* History */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.filter-bar input[type=text],.filter-bar select{
+  border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12px;
+  font-family:'IBM Plex Sans',sans-serif;background:#fff;flex:1 1 auto;min-width:100px;
+}
+.mock-entry{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.mock-entry .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.mock-entry .name{font-family:'Roboto Slab',serif;font-weight:700;font-size:14px;}
+.mock-entry .date{font-size:10.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+.mock-entry .score{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:19px;white-space:nowrap;}
+.diff-badge{font-size:9.5px;padding:2px 7px;border-radius:10px;font-weight:700;text-transform:uppercase;}
+.diff-badge.Easy{background:var(--stamp-green-soft);color:var(--stamp-green);}
+.diff-badge.Moderate{background:var(--amber-soft);color:var(--amber);}
+.diff-badge.Hard{background:var(--red-pen-soft);color:var(--red-pen);}
+.sec-mini{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
+.sec-chip{font-size:10px;font-family:'IBM Plex Mono',monospace;padding:3px 6px;border-radius:5px;background:var(--paper-2);color:var(--muted);}
+.sec-chip.over{background:var(--red-pen-soft);color:var(--red-pen);font-weight:600;}
+.mock-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.mock-actions button{font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;}
+.mock-actions .del{background:none;border:none;color:var(--muted);text-decoration:underline;padding:0;}
+.mock-actions .view{background:var(--ink);color:#fff;border:none;}
+.compare-check{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted);margin-top:8px;}
+
+.trend-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px;}
+.trend-box h3{font-family:'Roboto Slab',serif;font-size:14px;margin:0 0 8px;}
+.trend-controls{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.trend-controls select{border:1px solid var(--line);border-radius:6px;padding:5px 7px;font-size:11.5px;background:#fff;}
+.trend-controls .rng button{font-size:10.5px;padding:5px 9px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;margin-right:4px;}
+.trend-controls .rng button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+.empty-state{text-align:center;padding:36px 18px;color:var(--muted);font-size:13px;}
+.empty-state .stamp{font-family:'Roboto Slab',serif;font-weight:900;font-size:14px;color:var(--register-blue);border:2px solid var(--register-blue);display:inline-block;padding:7px 14px;border-radius:6px;transform:rotate(-4deg);margin-bottom:10px;}
+
+/* Mistakes / Revision */
+.mistake-row{background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px 14px;margin-bottom:8px;}
+.mistake-row.LOW{border-left:4px solid var(--muted);}
+.mistake-row.MEDIUM{border-left:4px solid var(--register-blue);}
+.mistake-row.HIGH{border-left:4px solid var(--amber);background:var(--amber-soft);}
+.mistake-row.CRITICAL{border-left:4px solid var(--red-pen);background:var(--red-pen-soft);}
+.mistake-row .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.mistake-row .topic{font-weight:700;font-size:13px;word-break:break-word;}
+.mistake-row .meta{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.5;word-break:break-word;}
+.priority-pill{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:10px;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.priority-pill.LOW{background:var(--paper-2);color:var(--muted);}
+.priority-pill.MEDIUM{background:var(--register-blue-soft);color:var(--register-blue);}
+.priority-pill.HIGH{background:#F5E4C3;color:var(--amber);}
+.priority-pill.CRITICAL{background:var(--red-pen);color:#fff;}
+.revision-actions{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;}
+.revision-actions button{font-size:10.5px;padding:6px 9px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600;}
+.status-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;margin-left:6px;}
+.status-tag.Due{background:var(--paper-2);color:var(--muted);}
+.status-tag.InProgress{background:var(--register-blue-soft);color:var(--register-blue);}
+.status-tag.Revised{background:var(--amber-soft);color:var(--amber);}
+.status-tag.Mastered{background:var(--stamp-green-soft);color:var(--stamp-green);}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(31,42,68,0.55);z-index:100;align-items:flex-start;justify-content:center;padding:20px 10px;overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--paper);border-radius:12px;max-width:640px;width:100%;padding:18px;position:relative;margin-top:10px;max-height:88vh;overflow-y:auto;}
+.modal-box h2{font-family:'Roboto Slab',serif;font-size:18px;margin:0 0 12px;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--ink);color:#fff;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:14px;}
+.modal-section-title{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--register-blue);margin:16px 0 8px;border-bottom:1px dashed var(--line);padding-bottom:4px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12.5px;}
+.detail-grid div{display:flex;justify-content:space-between;background:var(--paper-2);padding:6px 8px;border-radius:6px;}
+.detail-grid b{font-family:'IBM Plex Mono',monospace;}
+.detail-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px;}
+.detail-table th,.detail-table td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;}
+.detail-table th{color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.note-block{background:var(--paper-2);border-radius:8px;padding:9px 11px;margin-bottom:6px;font-size:12.5px;}
+.note-block b{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;}
+
+.compare-panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px;}
+.compare-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12.5px;flex-wrap:wrap;gap:4px;}
+.compare-row:last-child{border-bottom:none;}
+.conclusion{font-size:12px;padding:6px 10px;background:var(--register-blue-soft);border-radius:6px;margin-top:4px;color:var(--ink);}
+.conclusion.good{background:var(--stamp-green-soft);}
+.conclusion.bad{background:var(--red-pen-soft);}
+
+.reset-link{text-align:center;margin-top:20px;}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;max-width:90%;text-align:center;}
+.toast.show{opacity:1;}
+.settings-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
+
+/* Narrow-screen fixes (small Android phones) */
+@media(max-width:380px){
+  .field-row.three{grid-template-columns:1fr 1fr;}
+  .field-row.three .field:last-child{grid-column:1 / -1;}
+  .timer-strip{grid-template-columns:repeat(2,1fr); gap:8px;}
+  .dial-card svg{width:44px;height:44px;}
+  .header h1{font-size:21px;}
+  .header .stats{gap:10px;}
+  .err-row{grid-template-columns:1fr 96px 26px;}
+  .dash-grid{grid-template-columns:1fr;}
+  .highlight-grid{grid-template-columns:1fr;}
+  .highlight-tile[style*="grid-column"]{grid-column:auto;}
+  .modal-box{padding:14px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="eyebrow">SSC CGL TIER-1 · MOCK ANALYSIS REGISTER</div>
+    <h1>Mock Register</h1>
+    <div class="sub">Sectional lock rule (2025+): 15 min per section, no time transfer</div>
+    <div class="stats">
+      <div class="stat"><b id="statCount">0</b><span>Mocks</span></div>
+      <div class="stat"><b id="statLatest">–</b><span>Latest</span></div>
+      <div class="stat"><b id="statGap">–</b><span>Gap to Target</span></div>
+    </div>
+    <div class="storage-note" id="storageNote">Storage: checking…</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="dashboard">Dashboard</div>
+    <div class="tab" data-tab="entry">New Mock</div>
+    <div class="tab" data-tab="history">History</div>
+    <div class="tab" data-tab="mistakes">Mistakes</div>
+    <div class="tab" data-tab="revision">Revision</div>
+    <div class="tab" data-tab="data">Data</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="panel-dashboard"></div>
+
+  <!-- ENTRY -->
+  <div class="panel" id="panel-entry">
+    <div id="entryErrorBanner"></div>
+    <div class="card" id="metaCard"></div>
+    <div class="timer-strip" id="timerStrip"></div>
+    <div id="sectionCards"></div>
+    <div class="card" id="notesCard"></div>
+    <div class="total-preview">
+      <div><div class="lbl">Total Score (est.)</div></div>
+      <div class="val" id="totalPreview">0</div>
+    </div>
+    <div class="save-bar"><button class="btn-save" id="btnSave">Save Mock Entry</button></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="panel" id="panel-history">
+    <div class="trend-box" id="trendBox" style="display:none;"></div>
+    <div class="compare-panel" id="comparePanel" style="display:none;"></div>
+    <div class="filter-bar" id="historyFilterBar"></div>
+    <div id="historyList"></div>
+  </div>
+
+  <!-- MISTAKES -->
+  <div class="panel" id="panel-mistakes">
+    <div class="filter-bar" id="mistakeFilterBar"></div>
+    <div id="mistakesList"></div>
+  </div>
+
+  <!-- REVISION -->
+  <div class="panel" id="panel-revision">
+    <div class="filter-bar" id="revisionFilterBar"></div>
+    <div id="revisionList"></div>
+  </div>
+
+  <!-- DATA / SETTINGS -->
+  <div class="panel" id="panel-data"></div>
+
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="importFileInput" accept="application/json" style="display:none;">
+
+<script>
+/* ============================= CONSTANTS ============================= */
+const SECTIONS = [
+  {key:'reasoning', name:'Reasoning', total:25},
+  {key:'quant', name:'Quant Aptitude', total:25},
+  {key:'english', name:'English', total:25},
+  {key:'ga', name:'General Awareness', total:25},
+];
+const BUDGET_SEC = 15*60;
+const MISTAKE_TYPES = ['Concept Not Known','Formula Forgotten','Calculation Mistake','Silly Mistake','Misread Question','Time Pressure','Wrong Question Selection','Guess','Confused Between Options','Other'];
+const UNATTEMPTED_REASONS = [
+  {key:'timeOver', label:'Time Over'},
+  {key:'didntKnow', label:"Didn't Know"},
+  {key:'confused', label:'Confused'},
+  {key:'conceptWeak', label:'Concept Weak'},
+  {key:'tooLengthy', label:'Too Lengthy'},
+  {key:'leftForLater', label:'Left for Later'},
+  {key:'risky', label:'Risky / Low Confidence'},
+  {key:'other', label:'Other'},
+];
+
+let mocks = [];
+let revisionStatus = {};
+let settings = {targetScore:160};
+let storageMode = 'checking';
+let compareSelection = [];
+let trendState = {metric:'overall', range:5};
+let historyState = {search:'', difficulty:'All', sort:'newest'};
+let mistakeState = {search:'', section:'All', priority:'All', sort:'priority'};
+let revisionState = {sort:'priority'};
+
+let toastTimer=null;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+/* ============================= STORAGE (primary + fallback) ============================= */
+async function storageGet(key){
+  try{
+    if(window.storage && typeof window.storage.get==='function'){
+      const res = await window.storage.get(key, false);
+      storageMode='primary';
+      return res ? res.value : null;
+    }
+    throw new Error('no primary storage');
+  }catch(e){
+    try{
+      storageMode='fallback';
+      return localStorage.getItem(key);
+    }catch(e2){
+      storageMode='error';
+      return null;
+    }
+  }
+}
+async function storageSet(key, valueStr){
+  try{
+    if(window.storage && typeof window.storage.set==='function'){
+      const res = await window.storage.set(key, valueStr, false);
+      if(res){ storageMode='primary'; return true; }
+      throw new Error('primary set returned null');
+    }
+    throw new Error('no primary storage');
+  }catch(e){
+    try{
+      localStorage.setItem(key, valueStr);
+      storageMode='fallback';
+      return true;
+    }catch(e2){
+      storageMode='error';
+      toast('⚠ Storage error — data could not be saved');
+      return false;
+    }
+  }
+}
+function updateStorageNote(){
+  const el=document.getElementById('storageNote');
+  if(!el) return;
+  if(storageMode==='primary') el.textContent='Storage: synced ✓';
+  else if(storageMode==='fallback') el.textContent='Storage: local device fallback ✓';
+  else el.textContent='Storage: unavailable — export data manually to be safe';
+}
+
+/* ============================= DATA MODEL / MIGRATION ============================= */
+function emptyReasons(){
+  const o={}; UNATTEMPTED_REASONS.forEach(r=>o[r.key]=0); return o;
+}
+function emptySection(){
+  return {timeSec:0, attempted:0, correct:0, wrong:0, guessed:0, guessedCorrect:0, score:0, errors:[], unattemptedReasons:emptyReasons()};
+}
+function normalizeMock(m){
+  const out = {
+    id: m.id || (Date.now()+Math.floor(Math.random()*1000)),
+    date: m.date || new Date().toISOString(),
+    mockName: m.mockName || '',
+    source: m.source || '',
+    difficulty: m.difficulty || 'Moderate',
+    mockNumber: m.mockNumber || '',
+    shift: m.shift || '',
+    notes: {
+      wentWell: (m.notes && m.notes.wentWell) || '',
+      biggestProblem: (m.notes && m.notes.biggestProblem) || '',
+      nextStrategy: (m.notes && m.notes.nextStrategy) || '',
+    },
+    sections: {},
+    total: 0
+  };
+  let total=0;
+  SECTIONS.forEach(s=>{
+    const src = (m.sections && m.sections[s.key]) || {};
+    const sec = Object.assign(emptySection(), src);
+    sec.errors = Array.isArray(sec.errors) ? sec.errors.map(e=>({topic:e.topic||'', type:e.type||'Other'})) : [];
+    sec.unattemptedReasons = Object.assign(emptyReasons(), src.unattemptedReasons||{});
+    sec.score = (sec.correct*2) - (sec.wrong*0.5);
+    total += sec.score;
+    out.sections[s.key]=sec;
+  });
+  out.total = typeof m.total==='number' ? m.total : total;
+  return out;
+}
+
+async function loadAll(){
+  try{
+    const raw = await storageGet('mocks-data');
+    const arr = raw ? JSON.parse(raw) : [];
+    mocks = arr.map(normalizeMock);
+  }catch(e){ mocks = []; }
+  try{
+    const raw2 = await storageGet('revision-status');
+    revisionStatus = raw2 ? JSON.parse(raw2) : {};
+  }catch(e){ revisionStatus = {}; }
+  try{
+    const raw3 = await storageGet('app-settings');
+    settings = raw3 ? Object.assign({targetScore:160}, JSON.parse(raw3)) : {targetScore:160};
+  }catch(e){ settings = {targetScore:160}; }
+  updateStorageNote();
+}
+async function saveMocks(){ await storageSet('mocks-data', JSON.stringify(mocks)); updateStorageNote(); }
+async function saveRevision(){ await storageSet('revision-status', JSON.stringify(revisionStatus)); }
+async function saveSettings(){ await storageSet('app-settings', JSON.stringify(settings)); }
+
+/* ============================= CALC HELPERS ============================= */
+function pct(n,d){ return d>0 ? (n/d*100) : 0; }
+function fmtTime(sec){ const m=Math.floor(sec/60), s=sec%60; return `${m}:${String(s).padStart(2,'0')}`; }
+function timeStatusFor(timeSec){
+  const p = pct(timeSec, BUDGET_SEC);
+  if(p>100) return 'red';
+  if(p>90) return 'yellow';
+  return 'green';
+}
+function sectionStats(sec){
+  const attempted=sec.attempted, correct=sec.correct, wrong=sec.wrong;
+  const unattempted = 25-attempted;
+  const accuracy = pct(correct, attempted);
+  const attemptRate = pct(attempted, 25);
+  const negMarks = wrong*0.5, posMarks = correct*2;
+  const score = posMarks-negMarks;
+  const avgTimePerQ = attempted>0 ? sec.timeSec/attempted : 0;
+  const timePct = pct(sec.timeSec, BUDGET_SEC);
+  const timeStatus = timeStatusFor(sec.timeSec);
+  return {attempted,correct,wrong,unattempted,accuracy,attemptRate,negMarks,posMarks,score,avgTimePerQ,timePct,timeStatus,timeSec:sec.timeSec};
+}
+function mockTotals(mock){
+  let attempted=0,correct=0,wrong=0;
+  SECTIONS.forEach(s=>{ const sec=mock.sections[s.key]; attempted+=sec.attempted; correct+=sec.correct; wrong+=sec.wrong; });
+  const unattempted=100-attempted;
+  return {attempted,correct,wrong,unattempted,accuracy:pct(correct,attempted),attemptRate:pct(attempted,100),negMarks:wrong*0.5,total:mock.total};
+}
+function sortedMocksAsc(){ return mocks.slice().sort((a,b)=> new Date(a.date)-new Date(b.date)); }
+function sortedMocksDesc(){ return mocks.slice().sort((a,b)=> new Date(b.date)-new Date(a.date)); }
+
+/* Shared unattempted-reason aggregation — used by mock-detail modal (single mock) and Dashboard (all mocks) */
+function aggregateUnattended(mockList){
+  const totals={}; UNATTEMPTED_REASONS.forEach(r=>totals[r.key]=0);
+  mockList.forEach(m=> SECTIONS.forEach(s=> UNATTEMPTED_REASONS.forEach(r=>{
+    totals[r.key] += (m.sections[s.key].unattemptedReasons||{})[r.key]||0;
+  })));
+  const total = Object.values(totals).reduce((a,b)=>a+b,0);
+  return {totals, total};
+}
+function mostCommonReason(totals){
+  const entries = UNATTEMPTED_REASONS.filter(r=>totals[r.key]>0);
+  if(entries.length===0) return {tie:false, key:null, label:null, val:0};
+  const max = Math.max(...entries.map(r=>totals[r.key]));
+  const top = entries.filter(r=>totals[r.key]===max);
+  return {tie: top.length>1, key: top[0].key, label: top[0].label, val: max};
+}
+function unattemptedInsight(mc){
+  if(!mc.key) return null;
+  if(mc.tie) return 'Your unattempted questions have multiple major causes.';
+  if(mc.key==='timeOver') return 'Most unattempted questions are due to time pressure.';
+  if(mc.key==='didntKnow' || mc.key==='conceptWeak') return 'Most unattempted questions are related to knowledge/concept gaps.';
+  if(mc.key==='tooLengthy') return 'Many questions are being skipped because they take too long.';
+  if(mc.key==='leftForLater') return 'Several questions are being left for later. Review your question-selection strategy.';
+  return `Most unattempted questions are due to: ${mc.label}.`;
+}
+
+/* ============================= VALIDATION ============================= */
+function validateSectionInput(key){
+  const errs=[];
+  const el=id=>document.getElementById(id);
+  const min=parseFloat(el(`${key}-min`).value)||0;
+  const sec=parseFloat(el(`${key}-sec`).value)||0;
+  const att=parseFloat(el(`${key}-att`).value)||0;
+  const cor=parseFloat(el(`${key}-cor`).value)||0;
+  const wro=parseFloat(el(`${key}-wro`).value)||0;
+  const gtot=parseFloat(el(`${key}-gtot`).value)||0;
+  const gcor=parseFloat(el(`${key}-gcor`).value)||0;
+  const fields=[`${key}-min`,`${key}-sec`,`${key}-att`,`${key}-cor`,`${key}-wro`,`${key}-gtot`,`${key}-gcor`];
+  fields.forEach(f=>el(f).classList.remove('invalid'));
+  const bad=(f)=>el(f).classList.add('invalid');
+  const secName = SECTIONS.find(s=>s.key===key).name;
+
+  if(min<0){ bad(`${key}-min`); errs.push(`${secName}: minutes cannot be negative`); }
+  if(sec<0 || sec>59){ bad(`${key}-sec`); errs.push(`${secName}: seconds must be 0–59`); }
+  if(att<0){ bad(`${key}-att`); errs.push(`${secName}: attempted cannot be negative`); }
+  if(att>25){ bad(`${key}-att`); errs.push(`${secName}: attempted cannot exceed 25`); }
+  if(cor<0){ bad(`${key}-cor`); errs.push(`${secName}: correct cannot be negative`); }
+  if(wro<0){ bad(`${key}-wro`); errs.push(`${secName}: wrong cannot be negative`); }
+  if(cor>att){ bad(`${key}-cor`); errs.push(`${secName}: correct cannot exceed attempted`); }
+  if(wro>att){ bad(`${key}-wro`); errs.push(`${secName}: wrong cannot exceed attempted`); }
+  if(cor+wro>att){ bad(`${key}-cor`); bad(`${key}-wro`); errs.push(`${secName}: correct + wrong cannot exceed attempted`); }
+  if(gtot<0){ bad(`${key}-gtot`); errs.push(`${secName}: guesses cannot be negative`); }
+  if(gtot>att){ bad(`${key}-gtot`); errs.push(`${secName}: guesses cannot exceed attempted`); }
+  if(gcor<0){ bad(`${key}-gcor`); errs.push(`${secName}: correct guesses cannot be negative`); }
+  if(gcor>gtot){ bad(`${key}-gcor`); errs.push(`${secName}: correct guesses cannot exceed total guesses`); }
+
+  /* Unattempted reason validation */
+  const unattempted = 25-att;
+  let reasonSum=0;
+  const reasonFields=[];
+  UNATTEMPTED_REASONS.forEach(r=>{
+    const fid = `${key}-ur-${r.key}`;
+    reasonFields.push(fid);
+    const raw = el(fid).value;
+    const val = parseFloat(raw)||0;
+    el(fid).classList.remove('invalid');
+    if(val<0){ el(fid).classList.add('invalid'); errs.push(`${secName}: ${r.label} cannot be negative`); }
+    else if(!Number.isInteger(val)){ el(fid).classList.add('invalid'); errs.push(`${secName}: ${r.label} must be a whole number`); }
+    reasonSum += val;
+  });
+  if(att>=0 && att<=25 && reasonSum!==unattempted){
+    reasonFields.forEach(fid=>el(fid).classList.add('invalid'));
+    errs.push(`${secName}: Unattempted reasons total ${reasonSum} but must equal ${unattempted} (Unattempted = 25 - Attempted)`);
+  }
+  return errs;
+}
+function validateAllInputs(){
+  let all=[];
+  SECTIONS.forEach(s=>{ all = all.concat(validateSectionInput(s.key)); });
+  return all;
+}
+
+/* ============================= DIAL (signature element) ============================= */
+function dialSvg(pct_, over){
+  const r=22, c=2*Math.PI*r, off=c*(1-Math.min(pct_,1));
+  const color = over ? 'var(--red-pen)' : (pct_>0.01 ? 'var(--stamp-green)' : 'var(--line)');
+  return `<svg width="52" height="52" viewBox="0 0 56 56">
+    <circle cx="28" cy="28" r="${r}" fill="none" stroke="var(--paper-2)" stroke-width="6"/>
+    <circle cx="28" cy="28" r="${r}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 28 28)"/>
+  </svg>`;
+}
+function renderTimerStrip(){
+  const strip=document.getElementById('timerStrip');
+  strip.innerHTML = SECTIONS.map(s=>`
+    <div class="dial-card" id="dial-${s.key}">
+      <div class="lbl">${s.name.split(' ')[0]}</div>
+      ${dialSvg(0,false)}
+      <div class="time-read" id="dialtime-${s.key}">0:00</div>
+      <div class="budget">of 15:00</div>
+    </div>`).join('');
+}
+function updateDial(key){
+  const min=parseInt(document.getElementById(`${key}-min`).value)||0;
+  const sec=parseInt(document.getElementById(`${key}-sec`).value)||0;
+  const total=min*60+sec;
+  const p=total/BUDGET_SEC, over=total>BUDGET_SEC;
+  const el=document.getElementById(`dial-${key}`);
+  el.querySelector('svg').outerHTML = dialSvg(p, over);
+  document.getElementById(`dialtime-${key}`).textContent = `${min}:${String(sec).padStart(2,'0')}`;
+  el.style.borderColor = over ? 'var(--red-pen)' : 'var(--line)';
+  recalc();
+}
+
+/* ============================= ENTRY FORM ============================= */
+function metaCardHtml(){
+  return `
+    <div class="card-head"><h3>Mock Details</h3></div>
+    <div class="field-row three">
+      <div class="field"><label>Mock Name</label><input type="text" id="m-name" placeholder="e.g. SURE60 Mock 12"></div>
+      <div class="field"><label>Source / Test Series</label><input type="text" id="m-source" placeholder="e.g. Parmar SSC"></div>
+      <div class="field"><label>Difficulty</label>
+        <select id="m-difficulty"><option>Easy</option><option selected>Moderate</option><option>Hard</option></select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Shift / Paper (optional)</label><input type="text" id="m-shift" placeholder="e.g. Shift 2"></div>
+      <div class="field"><label>Mock Number (optional)</label><input type="text" id="m-number" placeholder="e.g. 12"></div>
+    </div>`;
+}
+function sectionCardHtml(s){
+  const opts = MISTAKE_TYPES.map(t=>`<option>${t}</option>`).join('');
+  return `
+  <div class="card" data-section="${s.key}">
+    <div class="card-head"><h3>${s.name}</h3><span class="qcount">${s.total} Q · 15 min budget</span></div>
+    <div class="field-row three">
+      <div class="field"><label>Time (min)</label><input type="number" min="0" id="${s.key}-min" value="0" oninput="updateDial('${s.key}')"></div>
+      <div class="field"><label>Time (sec)</label><input type="number" min="0" max="59" id="${s.key}-sec" value="0" oninput="updateDial('${s.key}')"></div>
+      <div class="field"><label>Attempted</label><input type="number" min="0" max="25" id="${s.key}-att" value="0" oninput="recalc(); updateUnattemptedDisplay('${s.key}')"></div>
+    </div>
+    <div class="field-row three">
+      <div class="field"><label>Correct</label><input type="number" min="0" id="${s.key}-cor" value="0" oninput="recalc()"></div>
+      <div class="field"><label>Wrong</label><input type="number" min="0" id="${s.key}-wro" value="0" oninput="recalc()"></div>
+      <div class="field"><label>Score</label><input type="text" id="${s.key}-score" value="0" readonly></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Pure Guesses</label><input type="number" min="0" id="${s.key}-gtot" value="0" oninput="recalc()"></div>
+      <div class="field"><label>Guesses Correct</label><input type="number" min="0" id="${s.key}-gcor" value="0" oninput="recalc()"></div>
+    </div>
+    <div class="field" style="margin-top:4px;">
+      <label>Unattempted Analysis <span style="font-weight:400;">(why questions were skipped)</span></label>
+      <div class="reason-grid">
+        ${UNATTEMPTED_REASONS.map(r=>`
+        <div class="reason-field">
+          <label>${r.label}</label>
+          <input type="number" min="0" step="1" id="${s.key}-ur-${r.key}" value="0" oninput="updateUnattemptedDisplay('${s.key}')">
+        </div>`).join('')}
+      </div>
+      <div class="ur-status" id="${s.key}-ur-status"></div>
+    </div>
+    <div class="field" style="margin-top:4px;">
+      <label>Error Log — topic + mistake type</label>
+      <div id="${s.key}-errs"></div>
+      <button type="button" class="add-err" onclick="addErrRow('${s.key}')">+ Add topic</button>
+    </div>
+  </div>
+  <template id="opts-${s.key}">${opts}</template>`;
+}
+function updateUnattemptedDisplay(key){
+  const att = parseInt(document.getElementById(`${key}-att`).value)||0;
+  const unattempted = 25-att;
+  let sum=0;
+  UNATTEMPTED_REASONS.forEach(r=>{
+    const inp = document.getElementById(`${key}-ur-${r.key}`);
+    if(unattempted<=0){ inp.value=0; inp.disabled=true; }
+    else{ inp.disabled=false; }
+    sum += parseFloat(inp.value)||0;
+  });
+  const statusEl = document.getElementById(`${key}-ur-status`);
+  if(!statusEl) return;
+  if(unattempted<=0){
+    statusEl.textContent = 'No unattempted questions — nothing to log.';
+    statusEl.className='ur-status ok';
+  }else if(sum===unattempted){
+    statusEl.textContent = `Assigned ${sum} / Unattempted ${unattempted} ✓`;
+    statusEl.className='ur-status ok';
+  }else{
+    statusEl.textContent = `Assigned ${sum} / Unattempted ${unattempted} — must match exactly`;
+    statusEl.className='ur-status bad';
+  }
+}
+function addErrRow(key, topic='', type='Concept Not Known'){
+  const wrap=document.getElementById(`${key}-errs`);
+  const row=document.createElement('div');
+  row.className='err-row';
+  const optsHtml = MISTAKE_TYPES.map(t=>`<option ${t===type?'selected':''}>${t}</option>`).join('');
+  row.innerHTML = `<input type="text" placeholder="e.g. Mensuration" value="${topic}">
+    <select>${optsHtml}</select>
+    <button class="rm" onclick="this.parentElement.remove()">✕</button>`;
+  wrap.appendChild(row);
+}
+function notesCardHtml(){
+  return `
+    <div class="card-head"><h3>Mock Notes</h3></div>
+    <div class="field" style="margin-bottom:8px;"><label>What went well?</label><textarea id="n-well"></textarea></div>
+    <div class="field" style="margin-bottom:8px;"><label>Biggest problem?</label><textarea id="n-problem"></textarea></div>
+    <div class="field"><label>What will I change next mock?</label><textarea id="n-strategy"></textarea></div>`;
+}
+function recalc(){
+  let total=0;
+  SECTIONS.forEach(s=>{
+    const cor=parseFloat(document.getElementById(`${s.key}-cor`).value)||0;
+    const wro=parseFloat(document.getElementById(`${s.key}-wro`).value)||0;
+    const score=(cor*2)-(wro*0.5);
+    document.getElementById(`${s.key}-score`).value=score.toFixed(1);
+    total+=score;
+  });
+  document.getElementById('totalPreview').textContent=total.toFixed(1);
+}
+function renderEntryForm(){
+  document.getElementById('metaCard').innerHTML = metaCardHtml();
+  document.getElementById('sectionCards').innerHTML = SECTIONS.map(sectionCardHtml).join('');
+  document.getElementById('notesCard').innerHTML = notesCardHtml();
+  SECTIONS.forEach(s=>{ addErrRow(s.key); updateUnattemptedDisplay(s.key); });
+  document.getElementById('entryErrorBanner').innerHTML='';
+  recalc();
+}
+async function saveMockEntry(){
+  const errs = validateAllInputs();
+  if(errs.length>0){
+    document.getElementById('entryErrorBanner').innerHTML =
+      `<div class="error-banner"><b>Cannot save — fix the following:</b><ul>${errs.map(e=>`<li>${e}</li>`).join('')}</ul></div>`;
+    document.getElementById('entryErrorBanner').scrollIntoView({behavior:'smooth', block:'start'});
+    toast('Fix highlighted fields before saving');
+    return;
+  }
+  document.getElementById('entryErrorBanner').innerHTML='';
+
+  const sections={};
+  let total=0;
+  SECTIONS.forEach(s=>{
+    const min=parseInt(document.getElementById(`${s.key}-min`).value)||0;
+    const sec=parseInt(document.getElementById(`${s.key}-sec`).value)||0;
+    const att=parseInt(document.getElementById(`${s.key}-att`).value)||0;
+    const cor=parseInt(document.getElementById(`${s.key}-cor`).value)||0;
+    const wro=parseInt(document.getElementById(`${s.key}-wro`).value)||0;
+    const gtot=parseInt(document.getElementById(`${s.key}-gtot`).value)||0;
+    const gcor=parseInt(document.getElementById(`${s.key}-gcor`).value)||0;
+    const score=(cor*2)-(wro*0.5);
+    total+=score;
+    const errors=[];
+    document.querySelectorAll(`#${s.key}-errs .err-row`).forEach(r=>{
+      const topic=r.querySelector('input').value.trim();
+      const type=r.querySelector('select').value;
+      if(topic) errors.push({topic,type});
+    });
+    const unattemptedReasons={};
+    UNATTEMPTED_REASONS.forEach(r=>{
+      unattemptedReasons[r.key]=parseInt(document.getElementById(`${s.key}-ur-${r.key}`).value)||0;
+    });
+    sections[s.key]={timeSec:min*60+sec, attempted:att, correct:cor, wrong:wro, guessed:gtot, guessedCorrect:gcor, score, errors, unattemptedReasons};
+  });
+
+  const mock = normalizeMock({
+    id: Date.now()+Math.floor(Math.random()*1000),
+    date: new Date().toISOString(),
+    mockName: document.getElementById('m-name').value.trim(),
+    source: document.getElementById('m-source').value.trim(),
+    difficulty: document.getElementById('m-difficulty').value,
+    mockNumber: document.getElementById('m-number').value.trim(),
+    shift: document.getElementById('m-shift').value.trim(),
+    notes:{
+      wentWell: document.getElementById('n-well').value.trim(),
+      biggestProblem: document.getElementById('n-problem').value.trim(),
+      nextStrategy: document.getElementById('n-strategy').value.trim(),
+    },
+    sections, total
+  });
+  mocks.unshift(mock);
+  await saveMocks();
+  toast('Mock saved ✓');
+  renderEntryForm();
+  renderTimerStrip();
+  renderAll();
+}
+
+/* ============================= AGGREGATES ============================= */
+function computeSectionAggregate(key){
+  let sumScore=0,sumAtt=0,sumCor=0,sumWro=0,sumTime=0,count=0;
+  const scoresSeries=[];
+  sortedMocksAsc().forEach(m=>{
+    const sec=m.sections[key];
+    sumScore+=sec.score; sumAtt+=sec.attempted; sumCor+=sec.correct; sumWro+=sec.wrong; sumTime+=sec.timeSec;
+    count++;
+    scoresSeries.push({date:m.date, value:sec.score});
+  });
+  const avgScore = count? sumScore/count : 0;
+  const accuracy = pct(sumCor,sumAtt);
+  const attemptRate = pct(sumAtt, count*25);
+  const avgTime = count? sumTime/count : 0;
+  const avgTimePerQ = sumAtt>0 ? sumTime/sumAtt : 0;
+  const perfIndex = 0.5*pct(avgScore,50) + 0.3*accuracy + 0.2*attemptRate;
+  return {key, avgScore, accuracy, attemptRate, avgTime, avgTimePerQ, perfIndex, count, scoresSeries};
+}
+function dashboardData(){
+  if(mocks.length===0) return null;
+  const desc = sortedMocksDesc();
+  const totals = mocks.map(m=>m.total);
+  const latest = desc[0].total;
+  const best = Math.max(...totals);
+  const avg = totals.reduce((a,b)=>a+b,0)/totals.length;
+
+  let totalAttempted=0,totalCorrect=0,totalWrong=0;
+  let pureGuesses=0, correctGuesses=0;
+  mocks.forEach(m=>{
+    const t=mockTotals(m); totalAttempted+=t.attempted; totalCorrect+=t.correct; totalWrong+=t.wrong;
+    SECTIONS.forEach(s=>{ pureGuesses += m.sections[s.key].guessed; correctGuesses += m.sections[s.key].guessedCorrect; });
+  });
+  const overallAccuracy = pct(totalCorrect,totalAttempted);
+  const overallAttemptRate = pct(totalAttempted, mocks.length*100);
+  const guessStats = guessMessages({guessed:pureGuesses, guessedCorrect:correctGuesses});
+
+  const secAgg = {}; SECTIONS.forEach(s=> secAgg[s.key]=computeSectionAggregate(s.key));
+  const perfEntries = SECTIONS.map(s=>({key:s.key,name:s.name,val:secAgg[s.key].perfIndex}));
+  const strongest = perfEntries.reduce((a,b)=> b.val>a.val?b:a);
+  const weakest = perfEntries.reduce((a,b)=> b.val<a.val?b:a);
+  const timeEntries = SECTIONS.map(s=>({key:s.key,name:s.name,val:secAgg[s.key].avgTimePerQ}));
+  const positiveTimeEntries = timeEntries.filter(t=>t.val>0);
+  const fastest = positiveTimeEntries.length ? positiveTimeEntries.reduce((a,b)=> b.val<a.val?b:a) : timeEntries[0];
+  const slowest = timeEntries.reduce((a,b)=> b.val>a.val?b:a);
+
+  let mostImproved=null, mostDeclined=null;
+  if(mocks.length>=2){
+    const latestMock = desc[0], prevMock = desc[1];
+    const deltas = SECTIONS.map(s=>({name:s.name, delta:(latestMock.sections[s.key].score - prevMock.sections[s.key].score)}));
+    mostImproved = deltas.reduce((a,b)=> b.delta>a.delta?b:a);
+    mostDeclined = deltas.reduce((a,b)=> b.delta<a.delta?b:a);
+  }
+
+  const gap = settings.targetScore - latest;
+
+  return {latest,best,avg,totalAttempted,totalCorrect,totalWrong,
+    overallAccuracy,overallAttemptRate,secAgg,strongest,weakest,fastest,slowest,mostImproved,mostDeclined,gap,
+    totalMocks:mocks.length, pureGuesses, correctGuesses, guessStats};
+}
+
+/* Mistake grouping — shared by Mistakes & Revision tabs */
+function mistakeGroups(){
+  const agg={};
+  sortedMocksAsc().forEach(m=>{
+    SECTIONS.forEach(s=>{
+      (m.sections[s.key].errors||[]).forEach(e=>{
+        if(!e.topic) return;
+        const k = s.key+'|'+e.topic.trim().toLowerCase();
+        if(!agg[k]) agg[k]={key:k, section:s.key, sectionName:s.name, topic:e.topic.trim(), count:0, mockIds:new Set(), types:{}, firstDate:m.date, lastDate:m.date};
+        agg[k].count++;
+        agg[k].mockIds.add(m.id);
+        agg[k].types[e.type]=(agg[k].types[e.type]||0)+1;
+        agg[k].lastDate=m.date;
+      });
+    });
+  });
+  return Object.values(agg).map(a=>{
+    const mostCommonType = Object.entries(a.types).sort((x,y)=>y[1]-x[1])[0][0];
+    let priority='LOW';
+    if(a.count>=5) priority='CRITICAL'; else if(a.count>=3) priority='HIGH'; else if(a.count===2) priority='MEDIUM';
+    const status = revisionStatus[a.key] || 'Due';
+    return {...a, mocksCount:a.mockIds.size, mostCommonType, priority, status};
+  });
+}
+
+/* ============================= RULE-BASED COACH ============================= */
+function coachMessages(dash){
+  const msgs=[];
+  if(!dash) return msgs;
+  if(dash.overallAccuracy<75) msgs.push({t:'warn', m:'Accuracy needs improvement. Focus on reducing avoidable mistakes.'});
+  if(dash.overallAttemptRate<80) msgs.push({t:'warn', m:'You are leaving too many questions unattempted.'});
+  if(dash.overallAttemptRate>90 && dash.overallAccuracy<80) msgs.push({t:'warn', m:'Attempts are high but accuracy is suffering. Improve question selection.'});
+  const quantTime = dash.secAgg.quant.avgTime;
+  if(quantTime>900) msgs.push({t:'warn', m:'Maths is taking too long. Work on question selection and calculation speed.'});
+  const groups = mistakeGroups();
+  groups.filter(g=>g.count>=3).forEach(g=>{
+    msgs.push({t:'warn', m:`Revise ${g.topic} (${g.sectionName}) before the next mock.`});
+  });
+  if(dash.secAgg.english.accuracy>90) msgs.push({t:'good', m:'English is currently one of your strongest sections.'});
+
+  const desc = sortedMocksDesc();
+  if(desc.length>=3){
+    const [a,b,c] = desc.slice(0,3).map(m=>m.total);
+    if(a>b && b>c) msgs.push({t:'good', m:'Positive trend: your score has improved across the last 3 mocks.'});
+    if(a<b && b<c) msgs.push({t:'warn', m:'Recent score decline detected. Review your last three mocks before taking another full mock.'});
+  }
+  if(msgs.length===0) msgs.push({t:'info', m:'Keep logging mocks — more data means sharper, more specific recommendations.'});
+  return msgs;
+}
+
+/* ============================= GUESS ANALYSIS ============================= */
+function guessMessages(sec){
+  const wrongGuess = sec.guessed - sec.guessedCorrect;
+  const acc = sec.guessed>0 ? pct(sec.guessedCorrect, sec.guessed) : null;
+  const msgs=[];
+  if(sec.guessed>0){
+    if(acc<50) msgs.push('Guessing accuracy is low. Avoid blind guesses.');
+    else if(acc>=75) msgs.push('Guessing strategy is currently effective.');
+    if(sec.guessed>=5 && acc<50) msgs.push('High-risk guessing may be reducing your score.');
+  }
+  const marksFromGuesses = sec.guessedCorrect*2 - wrongGuess*0.5;
+  return {acc, wrongGuess, marksFromGuesses, marksLost: wrongGuess*0.5, msgs};
+}
+
+/* ============================= RENDER: DASHBOARD ============================= */
+function renderDashboard(){
+  const el=document.getElementById('panel-dashboard');
+  const dash=dashboardData();
+  if(!dash){
+    el.innerHTML=`<div class="empty-state"><div class="stamp">No Data Yet</div><br>Pehla mock "New Mock" tab se save karo — dashboard yahan auto-populate hoga.</div>`;
+    return;
+  }
+  const gapText = dash.gap<=0 ? `<span style="color:var(--stamp-green)">Target Achieved ✓</span>` : `${dash.gap.toFixed(1)} marks needed`;
+
+  let html = `<div class="dash-grid">
+    <div class="tile accent"><div class="lbl">Latest Score</div><div class="val">${dash.latest.toFixed(1)}</div></div>
+    <div class="tile good"><div class="lbl">Personal Best</div><div class="val">${dash.best.toFixed(1)}</div></div>
+    <div class="tile"><div class="lbl">Overall Average</div><div class="val">${dash.avg.toFixed(1)}</div></div>
+    <div class="tile ${dash.gap<=0?'good':'warn'}"><div class="lbl">Gap to Target (${settings.targetScore})</div><div class="val" style="font-size:14px;">${gapText}</div></div>
+    <div class="tile"><div class="lbl">Overall Accuracy</div><div class="val">${dash.overallAccuracy.toFixed(1)}%</div></div>
+    <div class="tile"><div class="lbl">Overall Attempt Rate</div><div class="val">${dash.overallAttemptRate.toFixed(1)}%</div></div>
+  </div>`;
+
+  html += `<div class="sec-perf-grid">`;
+  SECTIONS.forEach(s=>{
+    const a=dash.secAgg[s.key];
+    const ts = timeStatusFor(a.avgTime);
+    html += `<div class="sec-perf-card">
+      <div class="row1"><h4>${s.name}</h4><span class="time-status ${ts}">${ts==='red'?'OVER TIME':ts}</span></div>
+      <div class="mini-stats">
+        <span>Score: <b>${a.avgScore.toFixed(1)}</b>/50</span>
+        <span>Accuracy: <b>${a.accuracy.toFixed(1)}%</b></span>
+        <span>Time: <b>${fmtTime(Math.round(a.avgTime))}</b>/15:00</span>
+        <span>Avg/Q: <b>${a.avgTimePerQ.toFixed(1)}s</b></span>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  const groups = mistakeGroups();
+  const weakestTopic = groups.slice().sort((a,b)=>b.count-a.count)[0];
+  html += `<div class="highlight-grid">
+    <div class="highlight-tile"><div class="lbl">Strongest Section</div><div class="val">${dash.strongest.name}</div></div>
+    <div class="highlight-tile"><div class="lbl">Weakest Section</div><div class="val">${dash.weakest.name}</div></div>
+    <div class="highlight-tile"><div class="lbl">Fastest Section</div><div class="val">${dash.fastest.name}</div></div>
+    <div class="highlight-tile"><div class="lbl">Slowest Section</div><div class="val">${dash.slowest.name}</div></div>
+    <div class="highlight-tile"><div class="lbl">Most Improved</div><div class="val">${dash.mostImproved?dash.mostImproved.name+' ('+(dash.mostImproved.delta>=0?'+':'')+dash.mostImproved.delta.toFixed(1)+')':'Need 2+ mocks'}</div></div>
+    <div class="highlight-tile"><div class="lbl">Most Declined</div><div class="val">${dash.mostDeclined?dash.mostDeclined.name+' ('+dash.mostDeclined.delta.toFixed(1)+')':'Need 2+ mocks'}</div></div>
+    <div class="highlight-tile" style="grid-column:1/-1;"><div class="lbl">Weakest Topic</div><div class="val">${weakestTopic?weakestTopic.topic+' ('+weakestTopic.count+'× mistakes, '+weakestTopic.sectionName+')':'No mistakes logged yet'}</div></div>
+  </div>`;
+
+  const gs = dash.guessStats;
+  html += `<div class="card" style="margin-bottom:14px;">
+    <div class="card-head"><h3>Guess Analysis</h3><span class="qcount">across all mocks</span></div>
+    <div class="dash-grid" style="margin-bottom:${gs.msgs.length?'8px':'0'};">
+      <div class="tile"><div class="lbl">Pure Guesses</div><div class="val">${dash.pureGuesses}</div></div>
+      <div class="tile"><div class="lbl">Correct Guesses</div><div class="val">${dash.correctGuesses}</div></div>
+      <div class="tile"><div class="lbl">Wrong Guesses</div><div class="val">${gs.wrongGuess}</div></div>
+      <div class="tile"><div class="lbl">Guess Accuracy</div><div class="val">${dash.pureGuesses>0 ? gs.acc.toFixed(1)+'%' : '—'}</div></div>
+      <div class="tile" style="grid-column:1/-1;"><div class="lbl">Net Marks from Guesses</div><div class="val">${gs.marksFromGuesses>=0?'+':''}${gs.marksFromGuesses.toFixed(1)}</div></div>
+    </div>
+    ${gs.msgs.map(m=>`<div class="coach-msg ${m.toLowerCase().includes('effective')?'good':'warn'}" style="margin:0 -14px;border-left:none;padding:8px 14px;">${m}</div>`).join('')}
+  </div>`;
+
+  const ua = aggregateUnattended(mocks);
+  const mc = mostCommonReason(ua.totals);
+  const insight = unattemptedInsight(mc);
+  const uaRowsHtml = UNATTEMPTED_REASONS.filter(r=>ua.totals[r.key]>0).map(r=>`<div>${r.label} <b>${ua.totals[r.key]}</b></div>`).join('');
+  html += `<div class="card" style="margin-bottom:14px;">
+    <div class="card-head"><h3>Unattempted Analysis</h3><span class="qcount">across all mocks</span></div>
+    <div class="detail-grid" style="margin-bottom:${ua.total>0?'8px':'0'};">
+      <div>Total Unattempted <b>${ua.total}</b></div>
+      ${ua.total>0 ? `<div>Most Common <b>${mc.tie?'Multiple':mc.label}</b></div>` : ''}
+      ${uaRowsHtml}
+    </div>
+    ${ua.total===0 ? `<div style="font-size:11.5px;color:var(--muted);">No unattempted questions recorded yet.</div>` : `<div class="coach-msg info" style="margin:0 -14px;border-left:none;padding:8px 14px;">${insight}</div>`}
+  </div>`;
+
+  html += `<div class="coach-box"><div class="coach-msg info" style="border-left:none;font-weight:700;font-family:'Roboto Slab',serif;background:none;">Performance Coach</div>`;
+  coachMessages(dash).forEach(msg=>{ html+=`<div class="coach-msg ${msg.t}">${msg.m}</div>`; });
+  html += `</div>`;
+
+  el.innerHTML = html;
+}
+
+/* ============================= RENDER: HISTORY ============================= */
+function historyFilterBarHtml(){
+  return `
+    <input type="text" id="hSearch" placeholder="Search mock name…" value="${historyState.search}">
+    <select id="hDiff">
+      <option value="All">All difficulty</option>
+      <option value="Easy">Easy</option>
+      <option value="Moderate">Moderate</option>
+      <option value="Hard">Hard</option>
+    </select>
+    <select id="hSort">
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+      <option value="highest">Highest Score</option>
+      <option value="lowest">Lowest Score</option>
+    </select>`;
+}
+function applyHistoryFilters(){
+  let list = mocks.slice();
+  if(historyState.search) list = list.filter(m=> (m.mockName||'').toLowerCase().includes(historyState.search.toLowerCase()));
+  if(historyState.difficulty!=='All') list = list.filter(m=> m.difficulty===historyState.difficulty);
+  if(historyState.sort==='newest') list.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  else if(historyState.sort==='oldest') list.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  else if(historyState.sort==='highest') list.sort((a,b)=>b.total-a.total);
+  else if(historyState.sort==='lowest') list.sort((a,b)=>a.total-b.total);
+  return list;
+}
+function fmtDate(iso){ const d=new Date(iso); return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); }
+
+function renderHistory(){
+  document.getElementById('historyFilterBar').innerHTML = historyFilterBarHtml();
+  document.getElementById('hSearch').value = historyState.search;
+  document.getElementById('hDiff').value = historyState.difficulty;
+  document.getElementById('hSort').value = historyState.sort;
+  document.getElementById('hSearch').addEventListener('input', e=>{ historyState.search=e.target.value; renderHistoryList(); });
+  document.getElementById('hDiff').addEventListener('change', e=>{ historyState.difficulty=e.target.value; renderHistoryList(); });
+  document.getElementById('hSort').addEventListener('change', e=>{ historyState.sort=e.target.value; renderHistoryList(); });
+
+  renderTrendBox();
+  renderComparePanel();
+  renderHistoryList();
+}
+function renderHistoryList(){
+  const list=document.getElementById('historyList');
+  if(mocks.length===0){
+    list.innerHTML=`<div class="empty-state"><div class="stamp">No Entries Yet</div><br>Pehla mock save karo "New Mock" tab se.</div>`;
+    return;
+  }
+  const filtered = applyHistoryFilters();
+  if(filtered.length===0){ list.innerHTML=`<div class="empty-state">No mocks match this filter.</div>`; return; }
+
+  list.innerHTML = filtered.map(m=>{
+    const t = mockTotals(m);
+    const chips = SECTIONS.map(s=>{
+      const sec=m.sections[s.key]; const over=sec.timeSec>BUDGET_SEC;
+      return `<span class="sec-chip ${over?'over':''}">${s.name.split(' ')[0]}: ${sec.score.toFixed(1)} · ${fmtTime(sec.timeSec)}${over?' ⚠':''}</span>`;
+    }).join('');
+    return `<div class="mock-entry">
+      <div class="top">
+        <div>
+          <div class="name">${m.mockName || 'Untitled Mock'}</div>
+          <div class="date">${fmtDate(m.date)} ${m.difficulty?`· <span class="diff-badge ${m.difficulty}">${m.difficulty}</span>`:''}</div>
+        </div>
+        <div class="score">${m.total.toFixed(1)}<div style="font-size:10px;color:var(--muted);font-weight:400;">${((m.total/200)*100).toFixed(0)}% · Acc ${t.accuracy.toFixed(0)}%</div></div>
+      </div>
+      <div class="sec-mini">${chips}</div>
+      <div class="mock-actions">
+        <button class="view" onclick="openMockDetail(${m.id})">View Details</button>
+        <button class="del" onclick="deleteMock(${m.id})">Delete</button>
+      </div>
+      <label class="compare-check"><input type="checkbox" class="compareBox" value="${m.id}" ${compareSelection.includes(m.id)?'checked':''} onchange="toggleCompare(${m.id}, this.checked)"> Select for comparison</label>
+    </div>`;
+  }).join('');
+}
+
+/* ---- Trend chart ---- */
+function getMetricSeries(metric){
+  const asc = sortedMocksAsc();
+  return asc.map(m=>{
+    if(metric==='overall') return {date:m.date, value:m.total};
+    if(metric==='accuracy') return {date:m.date, value: mockTotals(m).accuracy};
+    if(metric==='attemptrate') return {date:m.date, value: mockTotals(m).attemptRate};
+    return {date:m.date, value: m.sections[metric].score};
+  });
+}
+function renderTrendBox(){
+  const box=document.getElementById('trendBox');
+  if(mocks.length<2){ box.style.display='none'; return; }
+  box.style.display='block';
+  const rangeOptions=[5,10,999];
+  box.innerHTML = `<h3>Score Trends</h3>
+    <div class="trend-controls">
+      <select id="trendMetric">
+        <option value="overall">Overall Score</option>
+        <option value="reasoning">Reasoning</option>
+        <option value="quant">Quant</option>
+        <option value="english">English</option>
+        <option value="ga">GA</option>
+        <option value="accuracy">Accuracy</option>
+        <option value="attemptrate">Attempt Rate</option>
+      </select>
+      <div class="rng">
+        <button data-r="5" class="${trendState.range===5?'active':''}">Last 5</button>
+        <button data-r="10" class="${trendState.range===10?'active':''}">Last 10</button>
+        <button data-r="999" class="${trendState.range===999?'active':''}">All</button>
+      </div>
+    </div>
+    <svg id="trendSvg" width="100%" height="80" viewBox="0 0 300 80" preserveAspectRatio="none"></svg>`;
+  document.getElementById('trendMetric').value = trendState.metric;
+  document.getElementById('trendMetric').addEventListener('change', e=>{ trendState.metric=e.target.value; drawTrend(); });
+  box.querySelectorAll('.rng button').forEach(b=>{
+    b.addEventListener('click', ()=>{ trendState.range=parseInt(b.dataset.r); box.querySelectorAll('.rng button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); drawTrend(); });
+  });
+  drawTrend();
+}
+function drawTrend(){
+  const svg=document.getElementById('trendSvg');
+  if(!svg) return;
+  let series = getMetricSeries(trendState.metric);
+  series = series.slice(Math.max(0, series.length-trendState.range));
+  if(series.length<2){ svg.innerHTML=`<text x="10" y="40" font-size="11" fill="var(--muted)">Need more mocks for this range</text>`; return; }
+  const values = series.map(s=>s.value);
+  const max=Math.max(...values), min=Math.min(...values,0);
+  const range=(max-min)||1;
+  const w=300,h=80,pad=8;
+  const pts = values.map((v,i)=>{
+    const x=pad+(i/(values.length-1||1))*(w-2*pad);
+    const y=h-pad-((v-min)/range)*(h-2*pad);
+    return `${x},${y}`;
+  }).join(' ');
+  svg.innerHTML = `<polyline points="${pts}" fill="none" stroke="#2C4A7C" stroke-width="2"/>
+    ${values.map((v,i)=>{
+      const x=pad+(i/(values.length-1||1))*(w-2*pad);
+      const y=h-pad-((v-min)/range)*(h-2*pad);
+      return `<circle cx="${x}" cy="${y}" r="2.5" fill="#2C4A7C"/>`;
+    }).join('')}`;
+}
+
+/* ---- Compare ---- */
+function toggleCompare(id, checked){
+  if(checked){ if(!compareSelection.includes(id)) compareSelection.push(id); if(compareSelection.length>2) compareSelection.shift(); }
+  else{ compareSelection = compareSelection.filter(x=>x!==id); }
+  renderComparePanel();
+  document.querySelectorAll('.compareBox').forEach(cb=>{ cb.checked = compareSelection.includes(parseInt(cb.value)); });
+}
+function renderComparePanel(){
+  const panel=document.getElementById('comparePanel');
+  if(compareSelection.length!==2){ panel.style.display='none'; panel.innerHTML=''; return; }
+  panel.style.display='block';
+  const mA = mocks.find(m=>m.id===compareSelection[0]);
+  const mB = mocks.find(m=>m.id===compareSelection[1]);
+  if(!mA || !mB){ panel.style.display='none'; return; }
+  const [older, newer] = new Date(mA.date)<=new Date(mB.date) ? [mA,mB] : [mB,mA];
+  const tO=mockTotals(older), tN=mockTotals(newer);
+  const scoreDiff = newer.total-older.total;
+  const accDiff = tN.accuracy-tO.accuracy;
+  const attDiff = tN.attempted-tO.attempted;
+
+  let rows = `<div class="compare-row"><span>Total Score</span><b>${older.total.toFixed(1)} → ${newer.total.toFixed(1)} (${scoreDiff>=0?'+':''}${scoreDiff.toFixed(1)})</b></div>
+    <div class="compare-row"><span>Accuracy</span><b>${tO.accuracy.toFixed(1)}% → ${tN.accuracy.toFixed(1)}% (${accDiff>=0?'+':''}${accDiff.toFixed(1)}%)</b></div>
+    <div class="compare-row"><span>Attempted</span><b>${tO.attempted} → ${tN.attempted} (${attDiff>=0?'+':''}${attDiff})</b></div>`;
+
+  let conclusions=[];
+  SECTIONS.forEach(s=>{
+    const so=older.sections[s.key], sn=newer.sections[s.key];
+    const sd = sn.score-so.score;
+    const ad = pct(sn.correct,sn.attempted) - pct(so.correct,so.attempted);
+    const td = sn.timeSec-so.timeSec;
+    rows += `<div class="compare-row"><span>${s.name} Score</span><b>${so.score.toFixed(1)} → ${sn.score.toFixed(1)} (${sd>=0?'+':''}${sd.toFixed(1)})</b></div>`;
+    if(Math.abs(sd)>=2) conclusions.push({good:sd>0, text:`${s.name} score ${sd>0?'improved':'dropped'} by ${Math.abs(sd).toFixed(1)} marks.`});
+    if(Math.abs(ad)>=3) conclusions.push({good:ad>0, text:`${s.name} accuracy ${ad>0?'improved':'decreased'} by ${Math.abs(ad).toFixed(0)}%.`});
+    if(Math.abs(td)>=30) conclusions.push({good:td<0, text:`${s.name} became ${td<0?'faster':'slower'} by ${Math.round(Math.abs(td)/60*10)/10} min.`});
+  });
+  conclusions.push({good:scoreDiff>0, text:`Overall score ${scoreDiff>0?'improved':(scoreDiff<0?'declined':'stayed the same')}.`});
+
+  panel.innerHTML = `<div class="card-head"><h3>Comparing Mocks</h3><button class="btn-sec" onclick="compareSelection=[];renderComparePanel();document.querySelectorAll('.compareBox').forEach(cb=>cb.checked=false);">Clear</button></div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">${older.mockName||fmtDate(older.date)} → ${newer.mockName||fmtDate(newer.date)}</div>
+    ${rows}
+    <div style="margin-top:10px;">${conclusions.map(c=>`<div class="conclusion ${c.good?'good':'bad'}">${c.text}</div>`).join('')}</div>`;
+}
+
+/* ---- Mock detail modal ---- */
+function openMockDetail(id){
+  const m=mocks.find(x=>x.id===id); if(!m) return;
+  const t=mockTotals(m);
+  let secRows='';
+  SECTIONS.forEach(s=>{
+    const st=sectionStats(m.sections[s.key]);
+    secRows += `<tr><td>${s.name}</td><td>${st.attempted}</td><td>${st.correct}</td><td>${st.wrong}</td><td>${st.unattempted}</td><td>${st.accuracy.toFixed(0)}%</td><td>${st.score.toFixed(1)}</td><td>${fmtTime(st.timeSec)}</td><td>${st.avgTimePerQ.toFixed(1)}s</td></tr>`;
+  });
+  const mistakeCounts={};
+  SECTIONS.forEach(s=> (m.sections[s.key].errors||[]).forEach(e=>{ mistakeCounts[e.type]=(mistakeCounts[e.type]||0)+1; }));
+  const mistakeRows = Object.entries(mistakeCounts).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('') || `<tr><td colspan="2" style="color:var(--muted);">No errors logged</td></tr>`;
+
+  const ua = aggregateUnattended([m]);
+  const uaRows = UNATTEMPTED_REASONS.filter(r=>ua.totals[r.key]>0).map(r=>`<tr><td>${r.label}</td><td>${ua.totals[r.key]}</td></tr>`).join('') || `<tr><td colspan="2" style="color:var(--muted);">No unattempted reasons logged</td></tr>`;
+
+  document.getElementById('modalBox').innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>${m.mockName||'Mock Analysis'}</h2>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">${fmtDate(m.date)} ${m.source?'· '+m.source:''} ${m.difficulty?`· <span class="diff-badge ${m.difficulty}">${m.difficulty}</span>`:''}</div>
+    <div class="detail-grid">
+      <div>Total Score <b>${m.total.toFixed(1)}/200</b></div>
+      <div>Attempted <b>${t.attempted}/100</b></div>
+      <div>Correct <b>${t.correct}</b></div>
+      <div>Wrong <b>${t.wrong}</b></div>
+      <div>Unattempted <b>${t.unattempted}</b></div>
+      <div>Accuracy <b>${t.accuracy.toFixed(1)}%</b></div>
+      <div>Attempt Rate <b>${t.attemptRate.toFixed(1)}%</b></div>
+      <div>Negative Marks <b>-${t.negMarks.toFixed(1)}</b></div>
+    </div>
+    <div class="modal-section-title">Section Breakdown</div>
+    <div class="table-scroll"><table class="detail-table"><thead><tr><th>Sec</th><th>Att</th><th>Cor</th><th>Wr</th><th>Un</th><th>Acc</th><th>Score</th><th>Time</th><th>Avg/Q</th></tr></thead>
+    <tbody>${secRows}</tbody></table></div>
+    <div class="modal-section-title">Mistake Breakdown</div>
+    <div class="table-scroll"><table class="detail-table"><thead><tr><th>Type</th><th>Count</th></tr></thead><tbody>${mistakeRows}</tbody></table></div>
+    <div class="modal-section-title">Unattempted Analysis</div>
+    <div class="table-scroll"><table class="detail-table"><thead><tr><th>Reason</th><th>Questions</th></tr></thead><tbody>${uaRows}</tbody></table></div>
+    <div style="font-size:11.5px;margin-top:4px;font-weight:600;">Total Unattempted: ${ua.total}</div>
+    <div class="modal-section-title">Notes</div>
+    <div class="note-block"><b>What went well</b>${m.notes.wentWell||'—'}</div>
+    <div class="note-block"><b>Biggest problem</b>${m.notes.biggestProblem||'—'}</div>
+    <div class="note-block"><b>Next mock strategy</b>${m.notes.nextStrategy||'—'}</div>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('show'); }
+
+async function deleteMock(id){
+  if(!confirm('Delete this mock entry? This cannot be undone.')) return;
+  mocks = mocks.filter(m=>m.id!==id);
+  compareSelection = compareSelection.filter(x=>x!==id);
+  await saveMocks();
+  renderAll();
+  toast('Mock deleted');
+}
+
+/* ============================= RENDER: MISTAKES ============================= */
+function mistakeFilterBarHtml(){
+  return `
+    <input type="text" id="msSearch" placeholder="Search topic…" value="${mistakeState.search}">
+    <select id="msSection">
+      <option value="All">All sections</option>
+      ${SECTIONS.map(s=>`<option value="${s.key}">${s.name}</option>`).join('')}
+    </select>
+    <select id="msPriority">
+      <option value="All">All priority</option>
+      <option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option>
+    </select>
+    <select id="msSort">
+      <option value="priority">Priority</option>
+      <option value="mistakes">Most Mistakes</option>
+      <option value="recent">Recently Missed</option>
+      <option value="alpha">Alphabetical</option>
+    </select>`;
+}
+const PRIORITY_ORDER = {CRITICAL:4, HIGH:3, MEDIUM:2, LOW:1};
+function applyMistakeFilters(groups){
+  let list=groups.slice();
+  if(mistakeState.search) list=list.filter(g=>g.topic.toLowerCase().includes(mistakeState.search.toLowerCase()));
+  if(mistakeState.section!=='All') list=list.filter(g=>g.section===mistakeState.section);
+  if(mistakeState.priority!=='All') list=list.filter(g=>g.priority===mistakeState.priority);
+  if(mistakeState.sort==='priority') list.sort((a,b)=> PRIORITY_ORDER[b.priority]-PRIORITY_ORDER[a.priority] || b.count-a.count);
+  else if(mistakeState.sort==='mistakes') list.sort((a,b)=>b.count-a.count);
+  else if(mistakeState.sort==='recent') list.sort((a,b)=>new Date(b.lastDate)-new Date(a.lastDate));
+  else if(mistakeState.sort==='alpha') list.sort((a,b)=>a.topic.localeCompare(b.topic));
+  return list;
+}
+function renderMistakes(){
+  document.getElementById('mistakeFilterBar').innerHTML = mistakeFilterBarHtml();
+  document.getElementById('msSearch').value=mistakeState.search;
+  document.getElementById('msSection').value=mistakeState.section;
+  document.getElementById('msPriority').value=mistakeState.priority;
+  document.getElementById('msSort').value=mistakeState.sort;
+  document.getElementById('msSearch').addEventListener('input', e=>{ mistakeState.search=e.target.value; renderMistakesList(); });
+  document.getElementById('msSection').addEventListener('change', e=>{ mistakeState.section=e.target.value; renderMistakesList(); });
+  document.getElementById('msPriority').addEventListener('change', e=>{ mistakeState.priority=e.target.value; renderMistakesList(); });
+  document.getElementById('msSort').addEventListener('change', e=>{ mistakeState.sort=e.target.value; renderMistakesList(); });
+  renderMistakesList();
+}
+function renderMistakesList(){
+  const list=document.getElementById('mistakesList');
+  const groups = mistakeGroups();
+  if(groups.length===0){ list.innerHTML=`<div class="empty-state"><div class="stamp">Clean Slate</div><br>Jaise mocks save karoge, repeated mistake topics yahan dikhenge.</div>`; return; }
+  const filtered = applyMistakeFilters(groups);
+  if(filtered.length===0){ list.innerHTML=`<div class="empty-state">No mistakes match this filter.</div>`; return; }
+  list.innerHTML = filtered.map(g=>`
+    <div class="mistake-row ${g.priority}">
+      <div class="top">
+        <div>
+          <div class="topic">${g.topic}</div>
+          <div class="meta">${g.sectionName} · ${g.count} mistake(s) across ${g.mocksCount} mock(s)<br>
+          Mostly: ${g.mostCommonType} · First: ${fmtDate(g.firstDate)} · Last: ${fmtDate(g.lastDate)}
+          <span class="status-tag ${g.status.replace(' ','')}">${g.status}</span></div>
+        </div>
+        <span class="priority-pill ${g.priority}">${g.priority}</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================= RENDER: REVISION ============================= */
+function revisionFilterBarHtml(){
+  return `<select id="rvSort">
+      <option value="priority">Priority</option>
+      <option value="mistakes">Most Mistakes</option>
+      <option value="recent">Recently Missed</option>
+      <option value="section">Section</option>
+    </select>`;
+}
+async function setRevisionStatus(key, status){
+  revisionStatus[key]=status;
+  await saveRevision();
+  renderRevisionList();
+  renderMistakesList();
+  toast(`Marked ${status}`);
+}
+function renderRevision(){
+  document.getElementById('revisionFilterBar').innerHTML = revisionFilterBarHtml();
+  document.getElementById('rvSort').value = revisionState.sort;
+  document.getElementById('rvSort').addEventListener('change', e=>{ revisionState.sort=e.target.value; renderRevisionList(); });
+  renderRevisionList();
+}
+function renderRevisionList(){
+  const list=document.getElementById('revisionList');
+  let groups = mistakeGroups();
+  if(groups.length===0){ list.innerHTML=`<div class="empty-state"><div class="stamp">Nothing to Revise</div><br>Revision queue mistake log se auto-fill hogi.</div>`; return; }
+  if(revisionState.sort==='priority') groups.sort((a,b)=>PRIORITY_ORDER[b.priority]-PRIORITY_ORDER[a.priority] || b.count-a.count);
+  else if(revisionState.sort==='mistakes') groups.sort((a,b)=>b.count-a.count);
+  else if(revisionState.sort==='recent') groups.sort((a,b)=>new Date(b.lastDate)-new Date(a.lastDate));
+  else if(revisionState.sort==='section') groups.sort((a,b)=>a.sectionName.localeCompare(b.sectionName));
+
+  list.innerHTML = groups.map(g=>`
+    <div class="mistake-row ${g.status==='Mastered' ? 'LOW' : g.priority}" style="${g.status==='Mastered'?'opacity:0.6;':''}">
+      <div class="top">
+        <div>
+          <div class="topic">${g.topic} <span class="status-tag ${g.status.replace(' ','')}">${g.status}</span></div>
+          <div class="meta">${g.sectionName} · ${g.count} mistake(s) · Mostly ${g.mostCommonType} · Last missed ${fmtDate(g.lastDate)}</div>
+        </div>
+        <span class="priority-pill ${g.priority}">${g.priority}</span>
+      </div>
+      <div class="revision-actions">
+        <button data-rkey="${escapeAttr(g.key)}" data-rstatus="In Progress">Start Revision</button>
+        <button data-rkey="${escapeAttr(g.key)}" data-rstatus="Revised">Mark Revised</button>
+        <button data-rkey="${escapeAttr(g.key)}" data-rstatus="Mastered">Mark Mastered</button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('[data-rkey]').forEach(btn=>{
+    btn.addEventListener('click', ()=> setRevisionStatus(btn.dataset.rkey, btn.dataset.rstatus));
+  });
+}
+function escapeAttr(str){
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ============================= RENDER: DATA/SETTINGS ============================= */
+function renderDataTab(){
+  const el=document.getElementById('panel-data');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-head"><h3>Target Score</h3></div>
+      <div class="settings-row">
+        <input type="number" id="targetInput" value="${settings.targetScore}" style="max-width:120px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;font-family:'IBM Plex Mono',monospace;">
+        <button class="btn-sec" id="btnSaveTarget">Save Target</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);">Default target: 160. Dashboard's "Gap to Target" updates from this.</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Backup / Restore</h3></div>
+      <div class="settings-row">
+        <button class="btn-sec green" id="btnExport">Download Backup (Export)</button>
+        <button class="btn-sec" id="btnImport">Restore Backup (Import)</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);">Exports all mocks, revision status and settings as a JSON file. Nothing is sent anywhere — it stays on your device.</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Danger Zone</h3></div>
+      <button class="btn-sec danger" id="btnClearAll">Clear All Data</button>
+    </div>
+  `;
+  document.getElementById('btnSaveTarget').addEventListener('click', async ()=>{
+    const v = parseFloat(document.getElementById('targetInput').value);
+    if(isNaN(v) || v<0 || v>200){ toast('Enter a valid target between 0–200'); return; }
+    settings.targetScore = v;
+    await saveSettings();
+    toast('Target saved ✓');
+    renderDashboard(); renderHeaderStats();
+  });
+  document.getElementById('btnExport').addEventListener('click', exportData);
+  document.getElementById('btnImport').addEventListener('click', ()=> document.getElementById('importFileInput').click());
+  document.getElementById('btnClearAll').addEventListener('click', clearAllData);
+}
+function exportData(){
+  const payload = {mocks, revisionStatus, settings, exportedAt:new Date().toISOString(), version:2};
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`ssc-mock-register-backup-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Backup downloaded ✓');
+}
+document.getElementById('importFileInput').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(ev){
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(!data || !Array.isArray(data.mocks)) throw new Error('Invalid backup file — "mocks" array missing');
+      if(!confirm(`Import ${data.mocks.length} mock(s)? This will replace your current data.`)) return;
+      mocks = data.mocks.map(normalizeMock);
+      revisionStatus = data.revisionStatus || {};
+      settings = Object.assign({targetScore:160}, data.settings||{});
+      await saveMocks(); await saveRevision(); await saveSettings();
+      renderAll();
+      toast('Backup restored ✓');
+    }catch(err){
+      toast('Import failed: file is not a valid backup');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+});
+async function clearAllData(){
+  if(!confirm('This will permanently delete ALL saved mocks, revision status and settings. Continue?')) return;
+  mocks=[]; revisionStatus={}; settings={targetScore:160}; compareSelection=[];
+  await saveMocks(); await saveRevision(); await saveSettings();
+  renderAll();
+  toast('All data cleared');
+}
+
+/* ============================= HEADER STATS ============================= */
+function renderHeaderStats(){
+  document.getElementById('statCount').textContent = mocks.length;
+  if(mocks.length===0){
+    document.getElementById('statLatest').textContent='–';
+    document.getElementById('statGap').textContent='–';
+    return;
+  }
+  const latest = sortedMocksDesc()[0].total;
+  document.getElementById('statLatest').textContent = latest.toFixed(1);
+  const gap = settings.targetScore - latest;
+  document.getElementById('statGap').textContent = gap<=0 ? 'Met ✓' : gap.toFixed(1);
+}
+
+/* ============================= TABS ============================= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(`panel-${t.dataset.tab}`).classList.add('active');
+    if(t.dataset.tab==='dashboard') renderDashboard();
+    if(t.dataset.tab==='history') renderHistory();
+    if(t.dataset.tab==='mistakes') renderMistakes();
+    if(t.dataset.tab==='revision') renderRevision();
+    if(t.dataset.tab==='data') renderDataTab();
+  });
+});
+document.getElementById('modalOverlay').addEventListener('click', e=>{ if(e.target.id==='modalOverlay') closeModal(); });
+document.getElementById('btnSave').addEventListener('click', saveMockEntry);
+
+function renderAll(){
+  renderHeaderStats();
+  renderDashboard();
+  renderTimerStrip();
+  renderEntryForm();
+  renderHistory();
+  renderMistakes();
+  renderRevision();
+  renderDataTab();
+}
+
+/* ============================= INIT ============================= */
+(async function init(){
+  renderTimerStrip();
+  renderEntryForm();
+  await loadAll();
+  renderHeaderStats();
+  renderDashboard();
+})();
+</script>
+</body>
+</html>
